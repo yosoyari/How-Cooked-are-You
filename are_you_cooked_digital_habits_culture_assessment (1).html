@@ -1,0 +1,3815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Are You Cooked? — Digital Habits & Culture Assessment</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Retro 8-Bit Arcade Google Fonts: Press Start 2P & Silkscreen -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Silkscreen', 'monospace'],
+            display: ['"Press Start 2P"', 'monospace'],
+          },
+          colors: {
+            mario: {
+              sky: '#5C94FC',
+              skyDark: '#3B73D9',
+              yellow: '#FCE844',
+              gold: '#FAC000',
+              red: '#E52521',
+              redDark: '#B51814',
+              green: '#00A800',
+              greenLight: '#48D848',
+              brick: '#C84C0C',
+              brickLight: '#E07020',
+              pink: '#FF47A3',
+              night: '#141418',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --mario-sky: #5C94FC;
+      --mario-yellow: #FCE844;
+      --mario-gold: #FAC000;
+      --mario-red: #E52521;
+      --mario-green: #00A800;
+      --mario-green-light: #48D848;
+      --mario-brick: #C84C0C;
+      --mario-brick-light: #E07020;
+      --arcade-pink: #FF47A3;
+      --pixel-black: #111111;
+    }
+
+    * {
+      image-rendering: pixelated;
+    }
+
+    body {
+      background-color: var(--mario-sky);
+      color: var(--pixel-black);
+      font-family: 'Silkscreen', monospace;
+      overflow-x: hidden;
+      padding-bottom: 52px;
+    }
+
+    .font-pixel-title {
+      font-family: 'Press Start 2P', monospace;
+      line-height: 1.45;
+    }
+
+    /* Hard 8-Bit Pixel Cards & Containers */
+    .pixel-card {
+      background-color: #FFFFFF;
+      border: 4px solid var(--pixel-black);
+      box-shadow: 6px 6px 0px var(--pixel-black);
+      border-radius: 0px;
+    }
+
+    .pixel-card-yellow {
+      background-color: var(--mario-yellow);
+      border: 4px solid var(--pixel-black);
+      box-shadow: 6px 6px 0px var(--pixel-black);
+      border-radius: 0px;
+    }
+
+    .pixel-card-pink {
+      background-color: #FFF0F7;
+      border: 4px solid var(--pixel-black);
+      box-shadow: 6px 6px 0px var(--arcade-pink), 10px 10px 0px var(--pixel-black);
+      border-radius: 0px;
+    }
+
+    .pixel-card-sm {
+      background-color: #FFFFFF;
+      border: 3px solid var(--pixel-black);
+      box-shadow: 4px 4px 0px var(--pixel-black);
+      border-radius: 0px;
+    }
+
+    /* Retro Arcade Buttons */
+    .pixel-btn {
+      border: 3px solid var(--pixel-black);
+      box-shadow: 4px 4px 0px var(--pixel-black);
+      border-radius: 0px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.12s ease;
+      cursor: pointer;
+    }
+
+    .pixel-btn:hover:not(:disabled) {
+      transform: translate(-1px, -1px);
+      box-shadow: 5px 5px 0px var(--pixel-black);
+    }
+
+    .pixel-btn:active:not(:disabled) {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px var(--pixel-black);
+    }
+
+    /* Flashy Pulsing PLAY Button */
+    .pixel-btn-play {
+      background-color: var(--mario-red);
+      color: #FFFFFF;
+      border: 4px solid var(--pixel-black);
+      box-shadow: 6px 6px 0px var(--pixel-black);
+      animation: playPulse 1.4s infinite steps(2, end);
+    }
+
+    .pixel-btn-play:hover {
+      background-color: #FF332E;
+      transform: translate(-2px, -2px);
+      box-shadow: 8px 8px 0px var(--pixel-black);
+    }
+
+    .pixel-btn-play:active {
+      transform: translate(4px, 4px);
+      box-shadow: 2px 2px 0px var(--pixel-black);
+    }
+
+    @keyframes playPulse {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.12); }
+    }
+
+    /* Quiz Answer Option Buttons */
+    .option-btn {
+      background-color: #FFFFFF;
+      border: 3px solid var(--pixel-black);
+      box-shadow: 4px 4px 0px var(--pixel-black);
+      border-radius: 0px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.1s ease;
+    }
+
+    .option-btn:hover {
+      background-color: var(--mario-yellow);
+      transform: translate(-1px, -1px);
+      box-shadow: 5px 5px 0px var(--pixel-black);
+    }
+
+    .option-btn.selected {
+      background-color: var(--mario-green-light);
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px var(--pixel-black);
+    }
+
+    .option-btn.selected .option-key {
+      background-color: var(--mario-yellow);
+      color: var(--pixel-black);
+    }
+
+    .option-key {
+      border: 2px solid var(--pixel-black);
+      background-color: #F4F4F5;
+      color: var(--pixel-black);
+    }
+
+    .question-transition {
+      animation: pixelPopIn 0.2s steps(4, end) forwards;
+    }
+
+    @keyframes pixelPopIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Animated Floating Pixel Clouds */
+    .pixel-cloud {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.92;
+      animation: driftCloud linear infinite;
+    }
+
+    @keyframes driftCloud {
+      from { transform: translateX(-180px); }
+      to { transform: translateX(calc(100vw + 180px)); }
+    }
+
+    /* Classic NES Brick Ground Bar */
+    .nes-brick-floor {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 36px;
+      z-index: 25;
+      background-color: var(--mario-brick);
+      border-top: 4px solid var(--pixel-black);
+      background-image:
+        linear-gradient(to right, var(--pixel-black) 3px, transparent 3px),
+        linear-gradient(to bottom, var(--mario-brick-light) 3px, transparent 3px, transparent 15px, var(--pixel-black) 15px, var(--pixel-black) 18px, var(--mario-brick-light) 18px, var(--mario-brick-light) 21px, transparent 21px);
+      background-size: 32px 32px;
+    }
+
+    /* Jagged Pixel-Stepped Divider (Tamagotchi / Arcade Reference Style) */
+    .pixel-jag-bar {
+      height: 12px;
+      width: 100%;
+      background-image: linear-gradient(90deg,
+        #111111 0%, #111111 12.5%,
+        #FF47A3 12.5%, #FF47A3 25%,
+        #FCE844 25%, #FCE844 37.5%,
+        #111111 37.5%, #111111 50%,
+        #48D848 50%, #48D848 62.5%,
+        #111111 62.5%, #111111 75%,
+        #FF47A3 75%, #FF47A3 87.5%,
+        #111111 87.5%, #111111 100%
+      );
+      background-size: 64px 12px;
+    }
+
+    /* Mark Zuckerberg Companion Animations */
+    @keyframes zuckHappyJump {
+      0%, 100% { transform: translateY(0) scale(1); }
+      35% { transform: translateY(-20px) scale(1.05); }
+      70% { transform: translateY(-6px) scale(1.02); }
+    }
+
+    @keyframes zuckSadSlump {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(4px) rotate(-2deg); }
+    }
+
+    @keyframes pixelTearDrop {
+      0% { transform: translateY(0); opacity: 1; }
+      80% { transform: translateY(14px); opacity: 1; }
+      100% { transform: translateY(18px); opacity: 0; }
+    }
+
+    @keyframes lizardTailWag {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-14deg); }
+      75% { transform: rotate(14deg); }
+    }
+
+    @keyframes avatarSmokeFloat {
+      0% { transform: translateY(0px); opacity: 0.9; }
+      100% { transform: translateY(-6px); opacity: 0.15; }
+    }
+
+    @keyframes bgSteamBillow {
+      0%, 100% { transform: translateY(0px) scale(1); opacity: 0.85; }
+      50% { transform: translateY(-3px) scale(1.04); opacity: 0.55; }
+    }
+
+    @keyframes bgFlameFlicker {
+      0%, 100% { transform: translateY(0px) scaleY(1); }
+      33% { transform: translateY(-2px) scaleY(1.06); }
+      66% { transform: translateY(1px) scaleY(0.95); }
+    }
+
+    @keyframes zuckEyeRoll {
+      0%   { transform: translate(0px, 0px); }
+      20%  { transform: translate(-1px, -1px); }
+      45%  { transform: translate(0px, -2px); }
+      70%  { transform: translate(1px, -1px); }
+      90%  { transform: translate(1px, 0px); }
+      100% { transform: translate(0px, 0px); }
+    }
+
+    @keyframes zuckDanceBody {
+      0%, 100% { transform: translateY(0px) translateX(-3px) rotate(-3deg); }
+      25% { transform: translateY(-8px) translateX(0px) rotate(0deg); }
+      50% { transform: translateY(0px) translateX(3px) rotate(3deg); }
+      75% { transform: translateY(-8px) translateX(0px) rotate(0deg); }
+    }
+
+    @keyframes zuckDanceArmLeft {
+      0%, 100% { transform: rotate(-145deg); transform-origin: 9px 23px; }
+      50% { transform: rotate(-35deg); transform-origin: 9px 23px; }
+    }
+
+    @keyframes zuckDanceArmRight {
+      0%, 100% { transform: rotate(35deg); transform-origin: 23px 23px; }
+      50% { transform: rotate(145deg); transform-origin: 23px 23px; }
+    }
+
+    @keyframes carIdleBounce {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-2px); }
+    }
+
+    @keyframes lizardArmyMarch {
+      0% { transform: translateX(-120px); }
+      100% { transform: translateX(calc(100vw + 120px)); }
+    }
+
+    @keyframes lizardHop {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .steam-bg-puff {
+      animation: bgSteamBillow 1.2s steps(3, end) infinite;
+    }
+
+    .flame-bg-tongue {
+      transform-origin: bottom center;
+      animation: bgFlameFlicker 0.45s steps(3, end) infinite;
+    }
+
+    .zuck-happy {
+      animation: zuckHappyJump 0.55s steps(4, end) 3;
+    }
+
+    .zuck-super-happy {
+      animation: zuckHappyJump 0.48s steps(4, end) infinite;
+    }
+
+    .zuck-sad {
+      animation: zuckSadSlump 0.9s steps(3, end) infinite;
+    }
+
+    .zuck-dancing {
+      animation: zuckDanceBody 0.55s steps(4, end) infinite;
+    }
+
+    .zuck-dancing .zuck-arm-left {
+      animation: zuckDanceArmLeft 0.55s steps(2, end) infinite;
+    }
+
+    .zuck-dancing .zuck-arm-right {
+      animation: zuckDanceArmRight 0.55s steps(2, end) infinite;
+    }
+
+    .zuck-eye-roll-pupil {
+      animation: zuckEyeRoll 1.6s steps(4, end) infinite;
+    }
+
+    .zuck-red-car-anim {
+      animation: carIdleBounce 0.4s steps(2, end) infinite;
+    }
+
+    .lizard-army-runner {
+      position: fixed;
+      bottom: 36px;
+      left: 0;
+      z-index: 35;
+      pointer-events: none;
+      animation: lizardArmyMarch linear infinite;
+    }
+
+    .lizard-army-sprite {
+      animation: lizardHop 0.35s steps(2, end) infinite;
+    }
+
+    .lizard-tail-wag {
+      transform-origin: 23px 29px;
+      animation: lizardTailWag 0.35s steps(2, end) infinite;
+    }
+
+    .smoke-wisp {
+      animation: avatarSmokeFloat 1.1s steps(3, end) infinite;
+    }
+
+    .zuck-happy .zuck-arm-left,
+    .zuck-super-happy .zuck-arm-left {
+      transform: rotate(-135deg);
+      transform-origin: 9px 23px;
+    }
+
+    .zuck-happy .zuck-arm-right,
+    .zuck-super-happy .zuck-arm-right {
+      transform: rotate(135deg);
+      transform-origin: 23px 23px;
+    }
+
+    .zuck-sad .zuck-arm-left {
+      transform: rotate(15deg);
+      transform-origin: 9px 23px;
+    }
+
+    .zuck-sad .zuck-arm-right {
+      transform: rotate(-15deg);
+      transform-origin: 23px 23px;
+    }
+
+    .tear-drop {
+      animation: pixelTearDrop 0.75s steps(4, end) infinite;
+    }
+    .tear-drop-delay {
+      animation: pixelTearDrop 0.75s steps(4, end) 0.35s infinite;
+    }
+
+    /* Avatar Creator Option Chip */
+    .avatar-choice-btn {
+      background-color: #FFFFFF;
+      border: 3px solid #111111;
+      box-shadow: 3px 3px 0px #111111;
+      transition: transform 0.08s ease, background-color 0.1s ease;
+    }
+
+    .avatar-choice-btn:hover {
+      background-color: #FCE844;
+      transform: translate(-1px, -1px);
+    }
+
+    .avatar-choice-btn.active {
+      background-color: #48D848;
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px #111111;
+    }
+
+    /* 2D Animated Dollar Bill Pop-Up */
+    @keyframes dollarPopUp {
+      0% {
+        opacity: 0;
+        transform: translate(0px, 10px) scale(0.5) rotate(-18deg);
+      }
+      25% {
+        opacity: 1;
+        transform: translate(8px, -78px) scale(1.15) rotate(12deg);
+      }
+      60% {
+        opacity: 1;
+        transform: translate(34px, -95px) scale(1.05) rotate(-8deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(56px, -18px) scale(0.85) rotate(6deg);
+      }
+    }
+
+    .flying-dollar-bill {
+      position: absolute;
+      left: 24px;
+      top: 10px;
+      z-index: 50;
+      pointer-events: none;
+      animation: dollarPopUp 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* Physical Stacked 2D Dollar Bill Slab */
+    .dollar-bill-slab {
+      width: 34px;
+      height: 7px;
+      background-color: #22C55E;
+      border: 2px solid #111111;
+      box-shadow: inset 0 2px 0 #86EFAC, inset -6px 0 0 #15803D;
+      position: relative;
+      margin-top: -2px;
+      animation: slabDrop 0.18s steps(3, end);
+    }
+
+    .dollar-bill-slab::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+      transform: translateX(-50%);
+      background-color: #FCE844;
+      border-left: 1px solid #111111;
+      border-right: 1px solid #111111;
+    }
+
+    @keyframes slabDrop {
+      from { transform: translateY(-10px); opacity: 0.4; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-mario-yellow selection:text-black">
+
+  <!-- DECORATIVE FLOATING 8-BIT SKY CLOUDS -->
+  <div class="pixel-cloud top-20" style="animation-duration: 46s; animation-delay: -8s;">
+    <svg width="96" height="48" viewBox="0 0 24 12" shape-rendering="crispEdges">
+      <rect x="6" y="2" width="12" height="8" fill="#FFFFFF"/>
+      <rect x="3" y="4" width="18" height="6" fill="#FFFFFF"/>
+      <rect x="1" y="6" width="22" height="4" fill="#FFFFFF"/>
+      <rect x="6" y="1" width="12" height="1" fill="#111111"/>
+      <rect x="3" y="3" width="3" height="1" fill="#111111"/>
+      <rect x="18" y="3" width="3" height="1" fill="#111111"/>
+      <rect x="1" y="5" width="2" height="1" fill="#111111"/>
+      <rect x="21" y="5" width="2" height="1" fill="#111111"/>
+      <rect x="0" y="6" width="1" height="4" fill="#111111"/>
+      <rect x="23" y="6" width="1" height="4" fill="#111111"/>
+      <rect x="1" y="10" width="22" height="1" fill="#111111"/>
+    </svg>
+  </div>
+  <div class="pixel-cloud top-44" style="animation-duration: 62s; animation-delay: -29s;">
+    <svg width="72" height="36" viewBox="0 0 24 12" shape-rendering="crispEdges">
+      <rect x="6" y="2" width="12" height="8" fill="#FFFFFF"/>
+      <rect x="3" y="4" width="18" height="6" fill="#FFFFFF"/>
+      <rect x="6" y="1" width="12" height="1" fill="#111111"/>
+      <rect x="3" y="10" width="18" height="1" fill="#111111"/>
+    </svg>
+  </div>
+
+  <!-- TOP 8-BIT GAME HUD BAR -->
+  <header class="sticky top-0 z-40 bg-[#141418] text-white border-b-4 border-[#111111]">
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2">
+      <!-- Brand / Reset to Home -->
+      <button id="navBrandBtn" type="button" class="flex items-center gap-2.5 text-left group focus:outline-none">
+        <div class="w-9 h-9 bg-mario-yellow border-2 border-white flex items-center justify-center text-black shrink-0 group-hover:bg-mario-gold transition-colors">
+          <!-- 8-bit Question Block Icon -->
+          <span class="font-pixel-title text-sm font-bold">?</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-pixel-title text-[11px] sm:text-xs text-mario-yellow tracking-tight">ARE YOU COOKED?</span>
+            <span class="hidden md:inline-block text-[10px] font-bold uppercase px-1.5 py-0.5 bg-mario-pink text-black border border-white">SCIENCES PO</span>
+          </div>
+        </div>
+      </button>
+
+      <!-- Center Arcade HUD Counters: WORLD & CASH -->
+      <div class="flex items-center gap-3 sm:gap-5 text-[10px] sm:text-xs font-pixel-title">
+        <div class="flex flex-col items-center">
+          <span class="text-[8px] text-zinc-400">STAGE</span>
+          <span id="hudWorldText" class="text-white">WORLD 1-1</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <span class="text-[8px] text-zinc-400">DATA CASH</span>
+          <span id="hudCashText" class="text-mario-yellow">$0</span>
+        </div>
+      </div>
+
+      <!-- Right Controls: Live DB status & 8-Bit Sound Toggle -->
+      <div class="flex items-center gap-2">
+        <!-- Live Database Counter Pill -->
+        <div id="headerLiveBadge" class="flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-bold border-2 border-white bg-zinc-900 text-white">
+          <span id="dbStatusDot" class="w-2.5 h-2.5 bg-mario-yellow inline-block"></span>
+          <span id="headerRespondentCount">SYNCING...</span>
+        </div>
+
+        <!-- 8-Bit Chiptune Sound Toggle Button -->
+        <button id="soundToggleBtn" type="button" aria-label="Toggle 8-Bit Sound Effects" title="Toggle 8-Bit SFX" class="px-2.5 py-1.5 bg-mario-yellow text-black border-2 border-white font-bold text-xs flex items-center gap-1.5 hover:bg-mario-gold transition-colors">
+          <svg id="soundIconOn" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor" shape-rendering="crispEdges">
+            <rect x="2" y="6" width="3" height="4"/>
+            <rect x="5" y="4" width="2" height="8"/>
+            <rect x="7" y="2" width="2" height="12"/>
+            <rect x="11" y="5" width="1" height="6"/>
+            <rect x="13" y="3" width="1" height="10"/>
+          </svg>
+          <svg id="soundIconOff" class="w-4 h-4 hidden" viewBox="0 0 16 16" fill="currentColor" shape-rendering="crispEdges">
+            <rect x="2" y="6" width="3" height="4"/>
+            <rect x="5" y="4" width="2" height="8"/>
+            <rect x="7" y="2" width="2" height="12"/>
+            <rect x="11" y="6" width="4" height="1"/>
+            <rect x="12" y="5" width="2" height="3"/>
+          </svg>
+          <span id="soundLabelText" class="hidden sm:inline text-[11px]">SFX:ON</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="relative z-10 flex-1 flex flex-col justify-center max-w-4xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10">
+
+    <!-- ==========================================
+         VIEW 1: LANDING / START VIEW (EXPLICIT ARCADE TITLE SCREEN)
+         ========================================== -->
+    <section id="landingView" class="w-full max-w-3xl mx-auto">
+      <div class="pixel-card-pink overflow-hidden">
+        <!-- Top Arcade Pink Banner -->
+        <div class="bg-mario-pink px-5 py-2.5 border-b-4 border-[#111111] flex items-center justify-between">
+          <span class="font-pixel-title text-[10px] sm:text-xs text-black">★ SCIENCES PO — SOCIAL MEDIA HEAT TEST ★</span>
+          <span class="font-pixel-title text-[10px] text-white bg-black px-2 py-0.5">1UP</span>
+        </div>
+
+        <!-- Sky-Blue Cloud Hero Stage -->
+        <div class="bg-mario-sky p-6 sm:p-9 text-center border-b-4 border-[#111111] relative">
+          <!-- Floating Pixel Flame & Gold Coins Marquee -->
+          <div class="flex items-center justify-center gap-3 sm:gap-4 mb-4">
+            <span class="inline-flex items-center justify-center w-8 h-9 bg-mario-gold border-3 border-[#111111] font-pixel-title text-xs text-black shadow-[3px_3px_0_#111111]">$</span>
+            <span class="inline-flex items-center justify-center w-9 h-9 bg-mario-red border-3 border-[#111111] shadow-[3px_3px_0_#111111]" title="Heat Meter">
+              <svg width="20" height="20" viewBox="0 0 10 10" shape-rendering="crispEdges">
+                <rect x="4" y="1" width="2" height="2" fill="#FCE844"/>
+                <rect x="3" y="3" width="4" height="2" fill="#F97316"/>
+                <rect x="2" y="5" width="6" height="4" fill="#FCE844"/>
+                <rect x="3" y="6" width="4" height="3" fill="#FFFFFF"/>
+              </svg>
+            </span>
+            <span class="inline-flex items-center justify-center w-8 h-9 bg-mario-gold border-3 border-[#111111] font-pixel-title text-xs text-black shadow-[3px_3px_0_#111111]">$</span>
+          </div>
+
+          <!-- MASSIVE Explicit Arcade Hero Title -->
+          <h1 class="font-pixel-title text-3xl sm:text-5xl md:text-[52px] leading-[1.2] text-mario-yellow tracking-tight mb-4 uppercase" style="text-shadow: 5px 5px 0px #111111, -2px -2px 0px #E52521;">
+            ARE YOU COOKED?
+          </h1>
+
+          <!-- Explicit High-Contrast Subtitle Banner -->
+          <div class="inline-block bg-mario-red border-4 border-[#111111] shadow-[5px_5px_0_#111111] px-4 py-3 sm:px-6 sm:py-3.5 mb-5 max-w-2xl">
+            <p class="font-pixel-title text-xs sm:text-base md:text-lg leading-snug text-white uppercase" style="text-shadow: 2px 2px 0px #111111;">
+              HOW MUCH HAS SOCIAL MEDIA ROASTED YOUR BRAIN?
+            </p>
+          </div>
+
+          <!-- Explicit Explanation + Visual Character Cook Stages -->
+          <div class="bg-white border-4 border-[#111111] shadow-[5px_5px_0_#111111] p-4 sm:p-5 text-left mb-5 space-y-4">
+            <p id="landingDescriptionText" class="text-sm sm:text-base text-zinc-900 leading-relaxed">
+              <strong>The more social media controls your habits, slang, dating, and self-image, the more "cooked" you are!</strong> Every online habit you admit cranks up the heat on your character—turning your avatar from chill to <strong>steaming</strong>, <strong>burning in flames</strong>, and finally a <strong>charred skull</strong> while feeding Mark Zuckerberg's data cash pile.
+            </p>
+
+            <!-- 4-Stage Visual Avatar Heat Meter Legend -->
+            <div class="pt-3 border-t-3 border-[#111111]">
+              <div class="font-pixel-title text-[9px] text-zinc-600 mb-2.5 uppercase">
+                YOUR AVATAR'S HEAT STAGES AS YOU ANSWER:
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                <div class="p-2 bg-emerald-100 border-2 border-[#111111]">
+                  <div class="font-pixel-title text-[9px] text-mario-green">0–20%</div>
+                  <div class="text-xs font-bold text-black mt-0.5">CHILL & RAW</div>
+                </div>
+                <div class="p-2 bg-zinc-200 border-2 border-[#111111]">
+                  <div class="font-pixel-title text-[9px] text-zinc-700">41–60%</div>
+                  <div class="text-xs font-bold text-black mt-0.5">STEAMING</div>
+                </div>
+                <div class="p-2 bg-orange-200 border-2 border-[#111111]">
+                  <div class="font-pixel-title text-[9px] text-mario-red">61–80%</div>
+                  <div class="text-xs font-bold text-black mt-0.5">ON FIRE</div>
+                </div>
+                <div class="p-2 bg-zinc-900 border-2 border-[#111111] text-white">
+                  <div class="font-pixel-title text-[9px] text-mario-yellow">81–100%</div>
+                  <div class="text-xs font-bold text-white mt-0.5">BURNT SKULL</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Game Mode Selector: Flash Version (Low Attention Span) vs Long Version (Chads) -->
+          <div class="bg-white border-3 border-[#111111] shadow-[4px_4px_0_#111111] p-4 mb-5 text-left">
+            <div class="font-pixel-title text-[10px] text-black mb-3">
+              CHOOSE YOUR GAME MODE:
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- Flash Version Button -->
+              <button
+                id="modeFlashBtn"
+                type="button"
+                class="pixel-btn p-3.5 text-left bg-zinc-100 text-black flex flex-col justify-between gap-1.5"
+              >
+                <div class="flex items-center justify-between w-full">
+                  <span class="font-pixel-title text-[10px] sm:text-[11px] text-mario-red">⚡ FLASH VERSION</span>
+                  <span id="modeFlashCheck" class="font-pixel-title text-[10px] text-black hidden">★</span>
+                </div>
+                <span class="text-xs font-bold uppercase text-zinc-800">Low Attention Span</span>
+                <span class="inline-block w-fit px-2 py-0.5 bg-white border-2 border-[#111111] font-pixel-title text-[8px] text-black">
+                  20 QS · ~2 MINS
+                </span>
+              </button>
+
+              <!-- Long Version Button -->
+              <button
+                id="modeLongBtn"
+                type="button"
+                class="pixel-btn p-3.5 text-left bg-mario-green-light text-black flex flex-col justify-between gap-1.5"
+              >
+                <div class="flex items-center justify-between w-full">
+                  <span class="font-pixel-title text-[10px] sm:text-[11px] text-black">👑 LONG VERSION</span>
+                  <span id="modeLongCheck" class="font-pixel-title text-[10px] text-black">★</span>
+                </div>
+                <span class="text-xs font-bold uppercase text-zinc-900">Chads</span>
+                <span class="inline-block w-fit px-2 py-0.5 bg-mario-yellow border-2 border-[#111111] font-pixel-title text-[8px] text-black">
+                  41 QS · ~4 MINS
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Player Name Entry Box at the Beginning -->
+          <div class="bg-mario-yellow border-3 border-[#111111] shadow-[4px_4px_0_#111111] p-4 mb-6 text-left">
+            <label for="landingPlayerNameInput" class="font-pixel-title text-[10px] text-black block mb-2">
+              ENTER PLAYER NAME:
+            </label>
+            <input
+              id="landingPlayerNameInput"
+              type="text"
+              maxlength="18"
+              placeholder="TYPE YOUR NAME..."
+              autocomplete="off"
+              class="w-full px-3.5 py-2.5 bg-white border-3 border-[#111111] font-pixel-title text-xs sm:text-sm text-black placeholder:text-zinc-400 focus:outline-none focus:bg-[#FFF9C4] uppercase"
+            />
+          </div>
+
+          <!-- Flashy Arcade PLAY Button -->
+          <div class="flex flex-col items-center">
+            <button id="startQuizBtn" type="button" class="pixel-btn-play w-full sm:w-auto px-10 py-5 font-pixel-title text-base sm:text-xl flex items-center justify-center gap-3">
+              <span>▶ PLAY</span>
+            </button>
+            <span class="mt-3 font-pixel-title text-[10px] text-white" style="text-shadow: 2px 2px 0 #111111;">
+              PRESS PLAY TO CUSTOMIZE AVATAR & ENTER WORLD 1-1
+            </span>
+          </div>
+        </div>
+
+        <!-- Jagged Pixel-Stepped Divider -->
+        <div class="pixel-jag-bar border-b-4 border-[#111111]"></div>
+
+        <!-- Sunny Yellow Game Info & Scale Section -->
+        <div class="bg-mario-yellow p-6 sm:p-8 space-y-6">
+          <!-- Key Metadata Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="pixel-card-sm p-3.5">
+              <div class="text-[11px] font-bold uppercase text-zinc-500">QUEST LOG</div>
+              <div id="landingQuestCountText" class="text-sm font-bold text-black mt-0.5">41 Qs · 6 Worlds</div>
+            </div>
+
+            <div class="pixel-card-sm p-3.5">
+              <div class="text-[11px] font-bold uppercase text-zinc-500">TIME LIMIT</div>
+              <div id="landingTimeLimitText" class="text-sm font-bold text-black mt-0.5">~4 Minutes</div>
+            </div>
+
+            <div class="pixel-card-sm p-3.5">
+              <div class="text-[11px] font-bold uppercase text-zinc-500">LIVE PLAYERS</div>
+              <div id="landingRespondentCount" class="text-sm font-bold text-mario-green mt-0.5">Loading...</div>
+            </div>
+          </div>
+
+          <!-- 6 Categories Preview Pills -->
+          <div>
+            <div class="font-pixel-title text-[10px] text-black mb-3">
+              6 ASSESSMENT WORLDS:
+            </div>
+            <div class="flex flex-wrap gap-2" id="landingCategoriesList">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Response Scale Reference Box -->
+          <div class="pixel-card-sm p-4 bg-white">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <span class="font-pixel-title text-[10px] text-black">FREQUENCY CONTROLS (1–5)</span>
+              <span class="text-xs font-bold text-zinc-600">Keys [1]-[5] supported</span>
+            </div>
+            <div class="grid grid-cols-5 gap-1.5 sm:gap-2 text-center">
+              <div class="p-2 border-2 border-[#111111] bg-zinc-100">
+                <div class="font-pixel-title text-xs text-mario-red">1</div>
+                <div class="text-[11px] font-bold text-black mt-1">Never</div>
+              </div>
+              <div class="p-2 border-2 border-[#111111] bg-zinc-100">
+                <div class="font-pixel-title text-xs text-mario-red">2</div>
+                <div class="text-[11px] font-bold text-black mt-1">Rarely</div>
+              </div>
+              <div class="p-2 border-2 border-[#111111] bg-zinc-100">
+                <div class="font-pixel-title text-xs text-black">3</div>
+                <div class="text-[11px] font-bold text-black mt-1">Sometimes</div>
+              </div>
+              <div class="p-2 border-2 border-[#111111] bg-mario-green-light/30">
+                <div class="font-pixel-title text-xs text-mario-green">4</div>
+                <div class="text-[11px] font-bold text-black mt-1">Frequently</div>
+              </div>
+              <div class="p-2 border-2 border-[#111111] bg-mario-green-light/50">
+                <div class="font-pixel-title text-xs text-mario-green">5</div>
+                <div class="text-[11px] font-bold text-black mt-1">Usually</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 1.5: PLAYER SELECT / AVATAR CREATOR PAGE
+         ========================================== -->
+    <section id="avatarView" class="w-full max-w-3xl mx-auto pb-28 hidden">
+      <div class="pixel-card-pink overflow-hidden">
+        <!-- Top Arcade Header -->
+        <div class="bg-mario-pink px-5 py-3 border-b-4 border-[#111111] flex flex-wrap items-center justify-between gap-2">
+          <span class="font-pixel-title text-[10px] sm:text-xs text-black">★ PLAYER SELECT — CREATE YOUR AVATAR ★</span>
+          <span class="font-pixel-title text-[10px] text-white bg-black px-2 py-0.5">COSMETIC ONLY</span>
+        </div>
+
+        <div class="bg-mario-yellow p-5 sm:p-7">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+            
+            <!-- Left Column: Live 8-Bit Avatar Preview Stage -->
+            <div class="md:col-span-5 flex flex-col items-center">
+              <div class="pixel-card w-full p-5 bg-mario-sky flex flex-col items-center text-center">
+                <span class="font-pixel-title text-[9px] text-white bg-black px-2.5 py-1 mb-3">LIVE PREVIEW (64×64 HD)</span>
+                
+                <!-- Framed High-Detail 64x64 Pixel Portrait -->
+                <div id="avatarCreatorPreviewBox" class="w-44 h-44 bg-white border-4 border-[#111111] shadow-[6px_6px_0_#111111] flex items-center justify-center p-2 mb-3">
+                  <!-- Populated by JS -->
+                </div>
+
+                <!-- Editable Player Name Synced from Title Screen -->
+                <div class="w-full mb-2.5 text-left">
+                  <label for="avatarPlayerNameInput" class="font-pixel-title text-[8px] text-white block mb-1" style="text-shadow: 1px 1px 0 #111111;">PLAYER NAME</label>
+                  <input
+                    id="avatarPlayerNameInput"
+                    type="text"
+                    maxlength="18"
+                    placeholder="PLAYER 1"
+                    autocomplete="off"
+                    class="w-full px-2.5 py-1.5 bg-white border-2 border-[#111111] font-pixel-title text-[10px] text-black uppercase focus:outline-none focus:bg-[#FFF9C4]"
+                  />
+                </div>
+
+                <div id="avatarSummaryTag" class="text-xs font-bold text-black bg-mario-yellow px-3 py-1.5 border-2 border-[#111111] w-full">
+                  Male · Oval · Short Crop
+                </div>
+
+                <button id="randomizeAvatarBtn" type="button" class="pixel-btn mt-3 w-full py-2.5 px-3 bg-white text-black font-pixel-title text-[10px] flex items-center justify-center gap-2">
+                  <span>🎲 RANDOMIZE</span>
+                </button>
+              </div>
+
+              <div class="mt-3 p-3 bg-white border-3 border-[#111111] text-[11px] font-bold text-zinc-800 leading-snug">
+                Note: Your avatar is purely aesthetic and never affects your quiz score—it tracks how cooked you get!
+              </div>
+            </div>
+
+            <!-- Right Column: 5 Customization Categories -->
+            <div class="md:col-span-7 space-y-4">
+              
+              <!-- 1. Gender (3 Options) -->
+              <div class="pixel-card-sm p-3.5 bg-white">
+                <label class="font-pixel-title text-[10px] text-black block mb-2.5">1. GENDER STYLE (3)</label>
+                <div id="avatarGenderOptions" class="grid grid-cols-3 gap-2">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <!-- 2. Skin Tone (5 Options) -->
+              <div class="pixel-card-sm p-3.5 bg-white">
+                <label class="font-pixel-title text-[10px] text-black block mb-2.5">2. SKIN TONE (5)</label>
+                <div id="avatarSkinOptions" class="grid grid-cols-5 gap-2">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <!-- 3. Face Shape (5 Options) -->
+              <div class="pixel-card-sm p-3.5 bg-white">
+                <label class="font-pixel-title text-[10px] text-black block mb-2.5">3. FACE SHAPE (5)</label>
+                <div id="avatarFaceOptions" class="grid grid-cols-3 sm:grid-cols-5 gap-1.5">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <!-- 4. Hair Style (5 Options) -->
+              <div class="pixel-card-sm p-3.5 bg-white">
+                <label class="font-pixel-title text-[10px] text-black block mb-2.5">4. HAIR STYLE (5)</label>
+                <div id="avatarHairOptions" class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <!-- 5. Eye Color (5 Basic Colors) -->
+              <div class="pixel-card-sm p-3.5 bg-white">
+                <label class="font-pixel-title text-[10px] text-black block mb-2.5">5. EYE COLOR (5)</label>
+                <div id="avatarEyeOptions" class="grid grid-cols-5 gap-2">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <!-- Confirm & Start Quiz CTA -->
+              <div class="pt-2 flex flex-col sm:flex-row gap-3">
+                <button id="backToLandingBtn" type="button" class="pixel-btn py-3.5 px-4 bg-zinc-200 text-black font-pixel-title text-[10px]">
+                  ◀ BACK
+                </button>
+                <button id="confirmAvatarBtn" type="button" class="pixel-btn-play flex-1 py-4 px-6 font-pixel-title text-xs sm:text-sm flex items-center justify-center gap-2">
+                  <span>▶ START QUIZ</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 2: QUIZ VIEW (44 QUESTIONS + 2X SCALED SIDE PLAYER AVATAR)
+         ========================================== -->
+    <section id="quizView" class="w-full max-w-[500px] mx-auto pt-1 pb-44 lg:pb-24 hidden">
+      
+      <!-- Persistent Side-of-Screen Player Avatar Card (Scaled Up by 2x) -->
+      <aside id="quizPlayerAvatarDock" aria-label="Player Avatar Cook Status" class="lg:fixed lg:left-4 lg:top-20 lg:w-56 z-30 mb-4 lg:mb-0">
+        <div class="pixel-card-sm p-3 sm:p-4 bg-mario-yellow flex lg:flex-col items-center justify-between lg:justify-center gap-3 text-center">
+          <div class="flex lg:flex-col items-center gap-3">
+            <!-- 2x Scaled Avatar Frame (w-32 h-32 on mobile, w-40 h-40 on desktop) -->
+            <div id="quizSideAvatarFrame" class="w-32 h-32 sm:w-40 sm:h-40 bg-white border-4 border-[#111111] shadow-[4px_4px_0_#111111] flex items-center justify-center shrink-0 p-1">
+              <!-- Populated dynamically with user's 64x64 avatar & live cook degree -->
+            </div>
+            <div class="text-left lg:text-center">
+              <div id="quizPlayerNameLabel" class="font-pixel-title text-[10px] sm:text-xs text-black break-words">PLAYER 1</div>
+              <div id="quizLiveCookBadge" class="mt-1.5 inline-block px-2 py-1 bg-white border-2 border-[#111111] font-pixel-title text-[8px] text-mario-red">
+                DEGREE 1: NOT BURNT
+              </div>
+            </div>
+          </div>
+          <div class="text-right lg:text-center lg:w-full lg:pt-2.5 lg:border-t-2 lg:border-[#111111]">
+            <div class="text-[9px] font-bold uppercase text-zinc-700">LIVE HEAT</div>
+            <div id="quizLiveHeatPercent" class="font-pixel-title text-sm text-black mt-0.5">0%</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Top Progress & Segmented World Bar -->
+      <div class="pixel-card-sm p-3 mb-4 bg-mario-yellow">
+        <div class="flex items-center justify-between text-xs font-bold text-black mb-2">
+          <div class="flex items-center gap-2">
+            <span id="progressCounterText" class="font-pixel-title text-[10px]">Q 1/44</span>
+            <span>·</span>
+            <span id="progressPercentText" class="font-bold">2%</span>
+          </div>
+          <span id="categoryStepLabel" class="font-pixel-title text-[10px] text-mario-red">WORLD 1-1</span>
+        </div>
+
+        <!-- 6-Segment World Progress Bar -->
+        <div id="segmentedProgressBar" class="grid grid-cols-6 gap-1.5 h-3 w-full">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </div>
+
+      <!-- Active Question Card -->
+      <div id="questionCard" class="pixel-card p-5 sm:p-6 question-transition">
+        <!-- Category Pill & Subheader Badge Row -->
+        <div class="flex flex-wrap items-center gap-2 mb-3.5">
+          <!-- Category Badge -->
+          <div id="activeCategoryBadge" class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold bg-mario-pink text-black border-2 border-[#111111]">
+            <span id="activeCategoryIcon" class="w-4 h-4 flex items-center justify-center"></span>
+            <span id="activeCategoryName">Social relations</span>
+          </div>
+
+          <!-- Subheader Badge -->
+          <div id="activeSubheaderBadge" class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold border-2 border-[#111111] bg-mario-yellow text-black">
+            <span>▸</span>
+            <span id="activeSubheaderText">A. Friendships</span>
+          </div>
+        </div>
+
+        <!-- Question Number & Prompt -->
+        <div class="mb-5">
+          <div id="questionNumberLabel" class="font-pixel-title text-[10px] text-mario-red mb-2">
+            STAGE 01 / 44
+          </div>
+          <h2 id="questionText" class="text-base sm:text-lg font-bold text-black leading-snug min-h-[3rem]">
+            How often do you take photos or videos when you are with your friends?
+          </h2>
+        </div>
+
+        <!-- 5 Frequency Options -->
+        <div id="optionsContainer" class="flex flex-col gap-2.5 mb-5">
+          <!-- Dynamically rendered buttons for 1-5 -->
+        </div>
+
+        <!-- Bottom Navigation Controls -->
+        <div class="pt-4 border-t-3 border-[#111111] flex items-center justify-between gap-2">
+          <button id="prevQuestionBtn" type="button" class="pixel-btn px-3 py-2 bg-zinc-200 text-xs font-bold text-black flex items-center gap-1.5 disabled:opacity-40 disabled:pointer-events-none">
+            <span>◀ PREV</span>
+          </button>
+
+          <div class="text-[11px] font-bold text-zinc-600 hidden sm:block">
+            KEYS [1]–[5]
+          </div>
+
+          <button id="nextQuestionBtn" type="button" class="pixel-btn px-3 py-2 bg-mario-yellow text-xs font-bold text-black flex items-center gap-1.5 disabled:opacity-40 disabled:pointer-events-none">
+            <span id="nextBtnText">NEXT ▶</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Subtle Evaluator Quick-Fill Toolbar -->
+      <div class="mt-3 flex items-center justify-between px-2 py-1.5 bg-black/80 text-white border-2 border-[#111111] text-[11px]">
+        <span id="quizTotalItemsText">41 ITEMS TOTAL</span>
+        <button id="demoQuickFillBtn" type="button" class="inline-flex items-center gap-1 text-[11px] font-bold text-mario-yellow hover:underline">
+          <span>⚡ DEMO QUICK-FILL</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 3: ANALYTICAL RESULTS DASHBOARD
+         ========================================== -->
+    <section id="resultsView" class="w-full space-y-6 pb-36 lg:pb-12 hidden">
+
+      <!-- 1. HERO SCORE & TIER CARD -->
+      <div class="pixel-card p-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b-4 border-[#111111]">
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-pixel-title bg-mario-green text-white border-2 border-[#111111]">
+              <span>★ QUEST COMPLETE ★</span>
+            </div>
+            <div id="resultModeBadge" class="inline-flex items-center px-2.5 py-1.5 text-[10px] font-pixel-title bg-mario-pink text-black border-2 border-[#111111]">
+              👑 CHAD MODE (41 QS)
+            </div>
+          </div>
+
+          <div id="liveSaveStatusBadge" class="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-700 bg-mario-yellow px-2.5 py-1 border-2 border-[#111111]">
+            <span id="liveSaveStatusText">Synced with live cohort database</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <!-- Left: Big Percentage Gauge & Score -->
+          <div class="lg:col-span-5 flex flex-col items-center sm:items-start text-center sm:text-left border-b-4 lg:border-b-0 lg:border-r-4 border-[#111111] pb-6 lg:pb-0 lg:pr-8">
+            <div class="font-pixel-title text-[10px] text-zinc-600 mb-2">
+              COOKNESS INDEX
+            </div>
+            <div class="flex flex-wrap items-baseline gap-3 my-1">
+              <span id="resultOverallPercent" class="font-pixel-title text-4xl sm:text-5xl text-mario-red" style="text-shadow: 3px 3px 0px #111111;">0%</span>
+              <span id="resultRawScoreBadge" class="text-xs font-bold px-2.5 py-1 border-2 border-[#111111] bg-mario-yellow text-black">0 / 220 pts</span>
+            </div>
+
+            <!-- 8-Bit Meter Bar -->
+            <div class="w-full h-5 bg-zinc-200 border-3 border-[#111111] my-4 p-0.5">
+              <div id="resultOverallBar" class="h-full bg-mario-red transition-all duration-700" style="width: 0%"></div>
+            </div>
+
+            <!-- Tier Scale Legend -->
+            <div class="w-full flex justify-between text-[10px] font-bold text-black uppercase">
+              <span>0% RAW</span>
+              <span>50% SIMMER</span>
+              <span>100% COOKED</span>
+            </div>
+          </div>
+
+          <!-- Right: Cooked Avatar Portrait + Tier Classification & Cohort Percentile -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 bg-mario-yellow/35 p-4 border-3 border-[#111111]">
+              <!-- Final Cooked Degree Avatar Frame -->
+              <div class="flex flex-col items-center shrink-0">
+                <div id="resultCookedAvatarFrame" class="w-32 h-32 sm:w-36 sm:h-36 bg-white border-4 border-[#111111] shadow-[4px_4px_0_#111111] flex items-center justify-center p-1">
+                  <!-- Populated by JS according to 5 cooked degrees -->
+                </div>
+                <span id="resultCookDegreeLabel" class="mt-2 px-2 py-0.5 bg-black text-mario-yellow font-pixel-title text-[8px]">
+                  DEGREE 1 / 5
+                </span>
+              </div>
+
+              <div class="text-center sm:text-left">
+                <div id="resultPlayerNameTitle" class="font-pixel-title text-[10px] text-mario-pink mb-1">
+                  PLAYER 1 — RANKING
+                </div>
+                <h2 id="resultTierTitle" class="font-pixel-title text-lg sm:text-xl text-black mb-2">
+                  Simmering
+                </h2>
+                <p id="resultTierDescription" class="text-xs sm:text-sm text-zinc-900 leading-relaxed">
+                  Loading your diagnostic description...
+                </p>
+              </div>
+            </div>
+
+            <!-- Live Cohort Comparison Metrics Box -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+              <div class="pixel-card-sm p-3 bg-white">
+                <div class="text-[10px] font-bold text-zinc-600 uppercase">COHORT AVG</div>
+                <div id="resultCohortAvg" class="font-pixel-title text-base text-black mt-1">--%</div>
+                <div id="resultCohortDelta" class="text-[11px] font-bold text-zinc-600 mt-1">Awaiting data</div>
+              </div>
+
+              <div class="pixel-card-sm p-3 bg-white">
+                <div class="text-[10px] font-bold text-zinc-600 uppercase">STANDING</div>
+                <div id="resultPercentileValue" class="font-pixel-title text-base text-mario-red mt-1">--</div>
+                <div id="resultPercentileSubtext" class="text-[11px] font-bold text-zinc-600 mt-1">Live comparison</div>
+              </div>
+
+              <div class="pixel-card-sm p-3 bg-white">
+                <div class="text-[10px] font-bold text-zinc-600 uppercase">PLAYERS (N)</div>
+                <div id="resultTotalRespondents" class="font-pixel-title text-base text-black mt-1">1</div>
+                <div class="text-[11px] font-bold text-zinc-600 mt-1">Real submissions</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. VISUAL COMPARISON DASHBOARD (RADAR CHART + BARS) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- 6-Axis SVG Radar Chart -->
+        <div class="lg:col-span-6 pixel-card p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-pixel-title text-xs sm:text-sm text-black">6-WORLD RADAR</h3>
+              <span class="text-xs font-bold px-2 py-0.5 bg-mario-yellow border-2 border-[#111111]">0–100%</span>
+            </div>
+            <p class="text-xs text-zinc-700 mb-4">
+              Geometric overlay of your conformity across the six worlds compared against the live player average.
+            </p>
+          </div>
+
+          <!-- SVG Radar Container -->
+          <div class="w-full flex items-center justify-center my-2">
+            <svg id="radarChartSvg" viewBox="0 0 360 320" class="w-full max-w-[340px] h-auto overflow-visible"></svg>
+          </div>
+
+          <!-- Legend -->
+          <div class="flex items-center justify-center gap-6 pt-3 border-t-3 border-[#111111] text-xs font-bold">
+            <div class="flex items-center gap-2">
+              <span class="w-3.5 h-3.5 bg-mario-red border-2 border-[#111111] inline-block"></span>
+              <span class="text-black">Your Score</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-4 h-0.5 border-t-3 border-dashed border-[#111111] inline-block"></span>
+              <span class="text-zinc-700">Live Cohort Avg</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Horizontal Comparison Bars per Category -->
+        <div class="lg:col-span-6 pixel-card p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-pixel-title text-xs sm:text-sm text-black">WORLD BREAKDOWN</h3>
+              <span id="comparisonNLabel" class="text-xs font-bold px-2 py-0.5 bg-mario-pink border-2 border-[#111111] text-black">N = 1</span>
+            </div>
+            <p class="text-xs text-zinc-700 mb-5">
+              Direct breakdown of your score versus the real-time cohort mean for each dimension.
+            </p>
+
+            <div id="comparisonBarsContainer" class="space-y-4">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Subcategory A vs B callout inside Social Relations -->
+          <div class="mt-6 pt-4 border-t-3 border-[#111111]">
+            <div class="font-pixel-title text-[9px] text-black mb-2.5">
+              WORLD 1 SPLIT: SOCIAL RELATIONS
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="pixel-card-sm p-3 bg-mario-yellow/40">
+                <div class="text-xs font-bold text-black">A. Friendships</div>
+                <div class="flex items-baseline justify-between mt-1">
+                  <span id="subcatFriendshipsScore" class="font-pixel-title text-sm text-mario-red">0%</span>
+                  <span id="subcatFriendshipsAvg" class="text-[11px] font-bold text-zinc-700">Avg: --%</span>
+                </div>
+              </div>
+              <div class="pixel-card-sm p-3 bg-mario-pink/25">
+                <div class="text-xs font-bold text-black">B. Romantic</div>
+                <div class="flex items-baseline justify-between mt-1">
+                  <span id="subcatRomanticScore" class="font-pixel-title text-sm text-mario-red">0%</span>
+                  <span id="subcatRomanticAvg" class="text-[11px] font-bold text-zinc-700">Avg: --%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. SIX CATEGORY SOCIOLOGICAL BREAKDOWN CARDS -->
+      <div>
+        <div class="pixel-card-yellow p-4 mb-4">
+          <h3 class="font-pixel-title text-xs sm:text-sm text-black">SOCIOLOGICAL DIMENSION ANALYSIS</h3>
+          <p class="text-xs sm:text-sm text-zinc-900 mt-1">How your responses map onto mechanisms of digital secondary socialisation</p>
+        </div>
+
+        <div id="categoryBreakdownGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- 4. ABOUT THIS STUDY (ONLY ON RESULTS PAGE SO RESPONDENTS ARE NOT BIASED) -->
+      <div class="pixel-card-pink p-6 sm:p-8">
+        <div class="space-y-3">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="font-pixel-title text-[10px] px-2 py-1 bg-black text-mario-yellow">SCIENCES PO SOCIOLOGY</span>
+            <span class="text-xs font-bold text-black">· Theoretical Note (Revealed Post-Assessment)</span>
+          </div>
+          <h3 class="font-pixel-title text-sm sm:text-base text-black">
+            ABOUT THIS STUDY: SOCIAL MEDIA AS AN AGENT OF SECONDARY SOCIALISATION
+          </h3>
+          <p class="text-sm text-zinc-900 leading-relaxed">
+            In classical sociology, <strong>primary socialisation</strong> occurs during childhood within the family, while <strong>secondary socialisation</strong> takes place later through institutions such as schools, peer groups, and media. Today, algorithmic platforms function as pervasive agents of secondary socialisation that continuously teach, reward, and police behavioural scripts among young people.
+          </p>
+          <p class="text-sm text-zinc-900 leading-relaxed">
+            Rather than enforcing norms through formal rules, social media relies on <strong>quantified peer validation</strong> (likes, ratios, views), <strong>algorithmic visibility</strong>, and <strong>horizontal surveillance</strong> (monitoring reposts, unliking reels, curating close-friends lists). Being "cooked" vernacularly describes the state in which an individual's language, romantic expectations, taste formation, self-worth, and political expression become deeply standardized by internet culture.
+          </p>
+        </div>
+      </div>
+
+      <!-- 5. BOTTOM ACTIONS BAR -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 pb-8">
+        <button id="retakeQuizBtn" type="button" class="pixel-btn w-full sm:w-auto px-6 py-4 bg-mario-yellow text-black font-pixel-title text-xs flex items-center justify-center gap-2">
+          <span>↺ PLAY AGAIN</span>
+        </button>
+
+        <button id="copyResultsBtn" type="button" class="pixel-btn w-full sm:w-auto px-6 py-4 bg-mario-green text-white font-pixel-title text-xs flex items-center justify-center gap-2">
+          <span>★ SHARE SCORE</span>
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       MARK ZUCKERBERG 8-BIT PROGRESS WALKER & RIGHT-SIDE WARP PIPE + CASH STACK
+       ========================================================================= -->
+
+  <!-- Full-Screen Lizards Army Invasion Container (Triggered on Extreme Cash Finale) -->
+  <div id="lizardArmyOverlay" class="fixed inset-0 pointer-events-none z-35 hidden overflow-hidden" aria-hidden="true"></div>
+
+  <!-- 1. Progress-Bar Mark Zuckerberg Sprite on the Brick Floor -->
+  <div id="zuckWalker" aria-label="Mark Zuckerberg Companion" style="position: fixed; left: 16px; bottom: 36px; z-index: 32; transition: left 0.35s steps(4, end);" class="pointer-events-none select-none flex flex-col items-center">
+    <!-- 2D Flying Dollar Bill Spawner Container (Spawns right above Zuck wherever he stands) -->
+    <div id="dollarBillEmitter" class="absolute inset-0 pointer-events-none"></div>
+
+    <!-- Pixel Speech Bubble (Never flipped horizontally so text is always readable) -->
+    <div id="zuckSpeechBubble" class="mb-1.5 px-2.5 py-1.5 bg-white border-3 border-[#111111] shadow-[3px_3px_0_#111111] max-w-[185px] sm:max-w-[225px] text-center relative">
+      <span id="zuckSpeechText" class="font-pixel-title text-[8px] sm:text-[9px] text-black block leading-tight">HI! I'M MARK ZUCKERBERG!</span>
+      <!-- Pixel Bubble Tail -->
+      <div class="w-2.5 h-2.5 bg-white border-r-3 border-b-3 border-[#111111] rotate-45 mx-auto -mb-3 mt-1"></div>
+    </div>
+
+    <!-- Character + Optional Flashy Red Sports Car Row -->
+    <div class="flex items-end gap-1.5">
+      <!-- Brand New Red Flashy Car (Appears on High Cash Finale) -->
+      <div id="zuckRedCar" class="hidden zuck-red-car-anim mb-0.5">
+        <svg width="112" height="54" viewBox="0 0 56 27" shape-rendering="crispEdges" class="drop-shadow-[3px_3px_0_rgba(17,17,17,0.5)]">
+          <!-- Sparkles -->
+          <rect x="4" y="3" width="2" height="2" fill="#FCE844"/>
+          <rect x="3" y="4" width="4" height="1" fill="#FCE844"/>
+          <rect x="48" y="2" width="2" height="2" fill="#FFFFFF"/>
+          <!-- Spoiler -->
+          <rect x="2" y="8" width="6" height="2" fill="#111111"/>
+          <rect x="3" y="9" width="4" height="2" fill="#E52521"/>
+          <rect x="4" y="11" width="2" height="3" fill="#111111"/>
+          <!-- Roof & Tinted Windshield -->
+          <rect x="16" y="6" width="20" height="2" fill="#111111"/>
+          <rect x="14" y="8" width="24" height="6" fill="#E52521"/>
+          <rect x="18" y="9" width="8" height="4" fill="#38BDF8"/>
+          <rect x="28" y="9" width="8" height="4" fill="#7DD3FC"/>
+          <rect x="20" y="9" width="2" height="3" fill="#FFFFFF"/>
+          <!-- Sleek Red Chassis -->
+          <rect x="4" y="13" width="48" height="8" fill="#111111"/>
+          <rect x="5" y="14" width="46" height="6" fill="#E52521"/>
+          <rect x="7" y="14" width="42" height="2" fill="#FF6B6B"/>
+          <!-- Gold Racing Stripe -->
+          <rect x="6" y="17" width="44" height="1" fill="#FCE844"/>
+          <!-- Headlight & Taillight -->
+          <rect x="49" y="15" width="3" height="3" fill="#FCE844"/>
+          <rect x="4" y="15" width="2" height="3" fill="#FF47A3"/>
+          <!-- Chrome Wheels & Tires -->
+          <rect x="10" y="18" width="10" height="8" fill="#111111"/>
+          <rect x="12" y="20" width="6" height="4" fill="#E5E7EB"/>
+          <rect x="14" y="21" width="2" height="2" fill="#FCE844"/>
+          <rect x="36" y="18" width="10" height="8" fill="#111111"/>
+          <rect x="38" y="20" width="6" height="4" fill="#E5E7EB"/>
+          <rect x="40" y="21" width="2" height="2" fill="#FCE844"/>
+        </svg>
+      </div>
+
+      <!-- 8-Bit Cartoon SVG Mark Zuckerberg Sprite -->
+      <div id="zuckCharacter" class="state-neutral transition-transform">
+        <div id="zuckSpriteFlip" style="transform: scaleX(1); transform-origin: center;">
+          <svg width="92" height="114" viewBox="0 0 36 42" shape-rendering="crispEdges" class="drop-shadow-[3px_3px_0_rgba(17,17,17,0.45)]">
+            
+            <!-- SECRET LIZARD TAIL (Appears behind his back when happy or in lizard army finale!) -->
+            <g id="zuckLizardTail" class="hidden lizard-tail-wag">
+              <rect x="2" y="27" width="6" height="4" fill="#16A34A"/>
+              <rect x="0" y="24" width="4" height="4" fill="#22C55E"/>
+              <rect x="0" y="21" width="2" height="3" fill="#4ADE80"/>
+              <!-- Pixel outline & scales -->
+              <rect x="2" y="26" width="6" height="1" fill="#111111"/>
+              <rect x="2" y="31" width="6" height="1" fill="#111111"/>
+              <rect x="0" y="21" width="1" height="7" fill="#111111"/>
+              <rect x="3" y="28" width="2" height="1" fill="#FCE844"/>
+            </g>
+
+            <!-- Floating Music Notes (Visible when dancing) -->
+            <g id="zuckMusicNotes" class="hidden">
+              <rect x="4" y="2" width="2" height="5" fill="#FCE844"/>
+              <rect x="3" y="5" width="3" height="2" fill="#FCE844"/>
+              <rect x="30" y="1" width="2" height="5" fill="#FF47A3"/>
+              <rect x="29" y="4" width="3" height="2" fill="#FF47A3"/>
+            </g>
+
+            <!-- Curly Brown Pixel Hair (Iconic Zuck Curls) -->
+            <rect x="11" y="1" width="14" height="2" fill="#111111"/>
+            <rect x="9" y="3" width="18" height="2" fill="#111111"/>
+            <rect x="11" y="2" width="14" height="3" fill="#5C3820"/>
+            <rect x="13" y="2" width="3" height="2" fill="#855434"/>
+            <rect x="19" y="2" width="4" height="2" fill="#855434"/>
+            <rect x="9" y="4" width="18" height="4" fill="#5C3820"/>
+            <rect x="10" y="4" width="2" height="2" fill="#855434"/>
+            <rect x="16" y="4" width="3" height="2" fill="#855434"/>
+            <rect x="23" y="4" width="2" height="2" fill="#855434"/>
+            <!-- Side Hair & Outline -->
+            <rect x="8" y="5" width="2" height="6" fill="#111111"/>
+            <rect x="26" y="5" width="2" height="6" fill="#111111"/>
+            <rect x="9" y="7" width="2" height="4" fill="#5C3820"/>
+            <rect x="25" y="7" width="2" height="4" fill="#5C3820"/>
+
+            <!-- Face / Head -->
+            <rect x="11" y="7" width="14" height="12" fill="#FAD2B8"/>
+            <rect x="11" y="7" width="14" height="1" fill="#E0A989"/>
+            <!-- Ears -->
+            <rect x="9" y="11" width="2" height="4" fill="#FAD2B8"/>
+            <rect x="8" y="11" width="1" height="4" fill="#111111"/>
+            <rect x="25" y="11" width="2" height="4" fill="#FAD2B8"/>
+            <rect x="27" y="11" width="1" height="4" fill="#111111"/>
+            <!-- Jaw Outline -->
+            <rect x="10" y="15" width="1" height="3" fill="#111111"/>
+            <rect x="25" y="15" width="1" height="3" fill="#111111"/>
+            <rect x="11" y="18" width="14" height="2" fill="#E0A989"/>
+            <rect x="12" y="19" width="12" height="1" fill="#111111"/>
+
+            <!-- Nose -->
+            <rect x="17" y="12" width="2" height="3" fill="#E0A989"/>
+
+            <!-- EXPRESSION 1: NEUTRAL / CALCULATING -->
+            <g id="zuckFaceNeutral">
+              <rect x="12" y="9" width="4" height="1" fill="#4A2E1B"/>
+              <rect x="20" y="9" width="4" height="1" fill="#4A2E1B"/>
+              <rect x="13" y="11" width="2" height="2" fill="#111111"/>
+              <rect x="21" y="11" width="2" height="2" fill="#111111"/>
+              <rect x="13" y="11" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="21" y="11" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="15" y="16" width="6" height="1" fill="#111111"/>
+              <rect x="21" y="15" width="1" height="1" fill="#111111"/>
+            </g>
+
+            <!-- EXPRESSION 2: ECSTATIC HAPPY + YELLOW LIZARD EYES -->
+            <g id="zuckFaceHappy" class="hidden">
+              <rect x="12" y="8" width="4" height="1" fill="#4A2E1B"/>
+              <rect x="20" y="8" width="4" height="1" fill="#4A2E1B"/>
+              <!-- Bright Yellow Reptilian Eyes with Vertical Slit Pupils -->
+              <g id="zuckLizardEyes">
+                <rect x="12" y="10" width="4" height="3" fill="#FCE844"/>
+                <rect x="20" y="10" width="4" height="3" fill="#FCE844"/>
+                <rect x="13" y="10" width="1" height="3" fill="#111111"/>
+                <rect x="21" y="10" width="1" height="3" fill="#111111"/>
+              </g>
+              <!-- Rosy Arcade Cheeks -->
+              <rect x="11" y="14" width="2" height="1" fill="#FF47A3"/>
+              <rect x="23" y="14" width="2" height="1" fill="#FF47A3"/>
+              <!-- Wide Open Happy Pixel Grin -->
+              <rect x="13" y="15" width="10" height="3" fill="#111111"/>
+              <rect x="14" y="15" width="8" height="1" fill="#FFFFFF"/>
+              <rect x="15" y="17" width="6" height="1" fill="#E52521"/>
+            </g>
+
+            <!-- EXPRESSION 3: SAD / CRYING -->
+            <g id="zuckFaceSad" class="hidden">
+              <rect x="12" y="10" width="2" height="1" fill="#4A2E1B"/>
+              <rect x="14" y="9" width="2" height="1" fill="#4A2E1B"/>
+              <rect x="20" y="9" width="2" height="1" fill="#4A2E1B"/>
+              <rect x="22" y="10" width="2" height="1" fill="#4A2E1B"/>
+              <rect x="13" y="11" width="2" height="2" fill="#111111"/>
+              <rect x="21" y="11" width="2" height="2" fill="#111111"/>
+              <!-- Animated Blue Pixel Tears -->
+              <rect class="tear-drop" x="12" y="13" width="2" height="3" fill="#38BDF8"/>
+              <rect class="tear-drop-delay" x="22" y="13" width="2" height="3" fill="#38BDF8"/>
+              <!-- Downturned Frown -->
+              <rect x="15" y="16" width="6" height="1" fill="#111111"/>
+              <rect x="14" y="17" width="1" height="1" fill="#111111"/>
+              <rect x="21" y="17" width="1" height="1" fill="#111111"/>
+            </g>
+
+            <!-- EXPRESSION 4: BORED & ROLLING EYES AROUND (Few Bills Finale) -->
+            <g id="zuckFaceBored" class="hidden">
+              <!-- Flat Bored Eyebrows & Half-Lidded Sclera -->
+              <rect x="12" y="9" width="4" height="1" fill="#4A2E1B"/>
+              <rect x="20" y="9" width="4" height="1" fill="#4A2E1B"/>
+              <rect x="12" y="10" width="4" height="3" fill="#FFFFFF"/>
+              <rect x="20" y="10" width="4" height="3" fill="#FFFFFF"/>
+              <!-- Rolling Pupils -->
+              <g class="zuck-eye-roll-pupil">
+                <rect x="13" y="11" width="2" height="2" fill="#111111"/>
+                <rect x="21" y="11" width="2" height="2" fill="#111111"/>
+              </g>
+              <!-- Heavy Bored Eyelids -->
+              <rect x="12" y="10" width="4" height="1" fill="#E0A989"/>
+              <rect x="20" y="10" width="4" height="1" fill="#E0A989"/>
+              <!-- Flat Unimpressed Mouth -->
+              <rect x="14" y="16" width="8" height="1" fill="#111111"/>
+            </g>
+
+            <!-- Neck -->
+            <rect x="16" y="20" width="4" height="2" fill="#E0A989"/>
+
+            <!-- Signature Grey T-Shirt Torso -->
+            <rect x="10" y="22" width="16" height="11" fill="#111111"/>
+            <rect x="11" y="22" width="14" height="10" fill="#9CA3AF"/>
+            <rect x="15" y="22" width="6" height="2" fill="#6B7280"/>
+            <rect x="11" y="29" width="14" height="3" fill="#6B7280"/>
+
+            <!-- BIG GOLD DOLLAR CHAIN (High Cash Finale) -->
+            <g id="zuckGoldChain" class="hidden">
+              <rect x="13" y="22" width="2" height="3" fill="#FCE844"/>
+              <rect x="21" y="22" width="2" height="3" fill="#FCE844"/>
+              <rect x="14" y="25" width="8" height="2" fill="#FAC000"/>
+              <!-- Chunky Dollar Medallion -->
+              <rect x="15" y="26" width="6" height="6" fill="#111111"/>
+              <rect x="16" y="27" width="4" height="4" fill="#FCE844"/>
+              <rect x="17" y="28" width="2" height="2" fill="#111111"/>
+            </g>
+
+            <!-- Left & Right Arms -->
+            <g class="zuck-arm-left">
+              <rect x="7" y="22" width="4" height="9" fill="#111111"/>
+              <rect x="8" y="23" width="2" height="5" fill="#9CA3AF"/>
+              <rect x="8" y="28" width="2" height="2" fill="#FAD2B8"/>
+            </g>
+            <g class="zuck-arm-right">
+              <rect x="25" y="22" width="4" height="9" fill="#111111"/>
+              <rect x="26" y="23" width="2" height="5" fill="#9CA3AF"/>
+              <rect x="26" y="28" width="2" height="2" fill="#FAD2B8"/>
+            </g>
+
+            <!-- MONEY SPREAD FAN OF DOLLAR BILLS (High Cash Finale) -->
+            <g id="zuckMoneySpread" class="hidden">
+              <!-- Left Hand Fan of $100 Bills -->
+              <rect x="1" y="23" width="9" height="5" fill="#111111"/>
+              <rect x="2" y="24" width="7" height="3" fill="#22C55E"/>
+              <rect x="3" y="21" width="8" height="5" fill="#111111"/>
+              <rect x="4" y="22" width="6" height="3" fill="#4ADE80"/>
+              <rect x="6" y="23" width="2" height="1" fill="#FCE844"/>
+              <!-- Right Hand Fan of $100 Bills -->
+              <rect x="26" y="23" width="9" height="5" fill="#111111"/>
+              <rect x="27" y="24" width="7" height="3" fill="#22C55E"/>
+              <rect x="25" y="21" width="8" height="5" fill="#111111"/>
+              <rect x="26" y="22" width="6" height="3" fill="#4ADE80"/>
+              <rect x="28" y="23" width="2" height="1" fill="#FCE844"/>
+            </g>
+
+            <!-- WALKING LEGS FRAME A (Idle / Stride 1) -->
+            <g id="zuckLegsFrameA">
+              <rect x="11" y="32" width="14" height="7" fill="#111111"/>
+              <rect x="12" y="32" width="5" height="6" fill="#1D4ED8"/>
+              <rect x="19" y="32" width="5" height="6" fill="#1D4ED8"/>
+              <rect x="11" y="38" width="6" height="3" fill="#E5E7EB"/>
+              <rect x="19" y="38" width="6" height="3" fill="#E5E7EB"/>
+              <rect x="10" y="40" width="16" height="2" fill="#111111"/>
+            </g>
+
+            <!-- WALKING LEGS FRAME B (Alternating Stride 2) -->
+            <g id="zuckLegsFrameB" class="hidden">
+              <rect x="10" y="32" width="16" height="6" fill="#111111"/>
+              <rect x="10" y="32" width="5" height="5" fill="#1D4ED8"/>
+              <rect x="21" y="32" width="5" height="6" fill="#1D4ED8"/>
+              <rect x="9" y="36" width="6" height="3" fill="#E5E7EB"/>
+              <rect x="21" y="38" width="6" height="3" fill="#E5E7EB"/>
+              <rect x="8" y="39" width="7" height="1" fill="#111111"/>
+              <rect x="20" y="40" width="8" height="2" fill="#111111"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Fixed Right-Side Warp Pipe & Growing Stack of 2D Dollar Bills -->
+  <aside id="zuckCashVault" aria-label="Accumulated Data Cash Stack" class="fixed right-2 sm:right-5 bottom-[36px] z-30 flex items-end gap-2 pointer-events-none select-none scale-90 sm:scale-100 origin-bottom-right">
+    <!-- Green Warp Pipe Landmark -->
+    <div class="w-16 flex flex-col items-center">
+      <div class="w-16 h-4 bg-mario-green border-3 border-[#111111] shadow-[inset_3px_0_0_#48D848,inset_-3px_0_0_#007800]"></div>
+      <div class="w-13 h-7 bg-mario-green border-x-3 border-[#111111] shadow-[inset_3px_0_0_#48D848,inset_-3px_0_0_#007800]" style="width: 52px;"></div>
+    </div>
+
+    <!-- Growing Stack of 2D Dollar Bills -->
+    <div class="flex flex-col items-center">
+      <div id="zuckCashCounter" class="mb-1 px-2 py-0.5 bg-mario-yellow border-2 border-[#111111] shadow-[2px_2px_0_#111111] font-pixel-title text-[9px] text-black">
+        $0
+      </div>
+
+      <div id="dollarStackPiles" class="flex items-end gap-1 min-h-[12px] px-1">
+        <!-- Dynamically populated with .dollar-bill-slab elements -->
+      </div>
+
+      <div class="w-20 h-5 bg-mario-brick border-3 border-[#111111] shadow-[inset_0_2px_0_#E07020]"></div>
+    </div>
+  </aside>
+
+  <!-- CLASSIC NES BRICK GROUND BAR -->
+  <div class="nes-brick-floor" aria-hidden="true"></div>
+
+  <!-- TOAST NOTIFICATION (NO ALERT/CONFIRM) -->
+  <div id="toastBanner" class="fixed bottom-14 left-5 z-50 pointer-events-none opacity-0 translate-y-2 transition-all duration-200">
+    <div class="pixel-card-sm px-4 py-3 flex items-center gap-2.5 bg-mario-yellow text-black">
+      <span class="font-pixel-title text-xs text-mario-green">★</span>
+      <span id="toastMessage" class="text-xs font-bold">Copied to clipboard</span>
+    </div>
+  </div>
+
+  <!-- APPLICATION & FIREBASE LOGIC -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // =========================================================================
+    // 1. 8-BIT PIXEL CATEGORY ICONS
+    // =========================================================================
+    const CATEGORY_ICONS = {
+      social: `<svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor" shape-rendering="crispEdges"><rect x="3" y="2" width="4" height="4"/><rect x="1" y="7" width="8" height="6"/><rect x="10" y="3" width="3" height="3"/><rect x="9" y="7" width="6" height="5"/></svg>`,
+      style: `<svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor" shape-rendering="crispEdges"><rect x="7" y="1" width="2" height="14"/><rect x="1" y="7" width="14" height="2"/><rect x="4" y="4" width="8" height="8"/></svg>`,
+      language: `<svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor" shape-rendering="crispEdges"><rect x="2" y="2" width="12" height="9"/><rect x="4" y="11" width="3" height="3"/><rect x="4" y="5" width="8" height="2" fill="#FFFFFF"/></svg>`,
+      self: `<svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor" shape-rendering="crispEdges"><rect x="5" y="2" width="6" height="6"/><rect x="3" y="9" width="10" height="5"/></svg>`,
+      public: `<svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor" shape-rendering="crispEdges"><rect x="2" y="5" width="12" height="6"/><rect x="6" y="6" width="4" height="4" fill="#FFFFFF"/><rect x="7" y="7" width="2" height="2"/></svg>`,
+      politics: `<svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor" shape-rendering="crispEdges"><rect x="3" y="2" width="2" height="12"/><rect x="5" y="2" width="8" height="6"/><rect x="2" y="13" width="6" height="2"/></svg>`
+    };
+
+    // =========================================================================
+    // 2. SIX SOCIOLOGICAL WORLDS & ANALYTICAL NOTES
+    // =========================================================================
+    const CATEGORIES = [
+      {
+        id: 'social',
+        index: 1,
+        name: 'Social relations',
+        shortName: 'Social',
+        icon: CATEGORY_ICONS.social,
+        conceptTitle: 'Relational Mediation & Performative Intimacy',
+        sociologyNote: 'Friendship maintenance and courtship rituals ("talking stages", "icks", "soft-launching", strategic response delays) increasingly follow standardized scripts learned through digital observation and peer benchmarking.'
+      },
+      {
+        id: 'style',
+        index: 2,
+        name: 'Style, presentation, and taste',
+        shortName: 'Style & Taste',
+        icon: CATEGORY_ICONS.style,
+        conceptTitle: 'Algorithmic Taste Formation & Mimetic Desire',
+        sociologyNote: 'Lifestyle expectations, dietary trends, aesthetic curation, and cultural discovery homogenize around viral micro-trends, turning personal taste into a collectively synchronized feed output.'
+      },
+      {
+        id: 'language',
+        index: 3,
+        name: 'Language',
+        shortName: 'Language',
+        icon: CATEGORY_ICONS.language,
+        conceptTitle: 'Linguistic Capital & In-Group Signaling',
+        sociologyNote: 'Hyper-specific internet vernacular ("cooked", "crashout", "brainrotted", "67", niche audio references) functions as generational linguistic capital, demarcating insiders who share the same algorithmic socialisation.'
+      },
+      {
+        id: 'self',
+        index: 4,
+        name: 'Self-perception',
+        shortName: 'Self-Perception',
+        icon: CATEGORY_ICONS.self,
+        conceptTitle: 'Quantified Self-Worth & The Looking-Glass Self',
+        sociologyNote: 'Extending Cooley’s "looking-glass self", digital platforms quantify peer approval into visible metrics—conditioning emotional validation and habit modification on external engagement.'
+      },
+      {
+        id: 'public',
+        index: 5,
+        name: 'Public perception',
+        shortName: 'Public Gaze',
+        icon: CATEGORY_ICONS.public,
+        conceptTitle: 'Digital Panopticism & Curated Identity',
+        sociologyNote: 'Drawing on Goffman’s impression management and Foucault’s panopticon, users internalize a constant peer gaze—policing follower ratios, unliking reels, using private stories, and feeling self-conscious in offline spaces.'
+      },
+      {
+        id: 'politics',
+        index: 6,
+        name: 'Politics',
+        shortName: 'Politics',
+        icon: CATEGORY_ICONS.politics,
+        conceptTitle: 'Performative Civic Identity & Irony Poisoning',
+        sociologyNote: 'Political socialisation on feeds blends symbolic repost signaling, attention fatigue, impulsive outrage, and the ironization of grave geopolitical events into shareable memes.'
+      }
+    ];
+
+    // =========================================================================
+    // 3. LONG VERSION (41 QUESTIONS — CHADS) & FLASH VERSION (20 QUESTIONS — LOW ATTENTION SPAN)
+    // =========================================================================
+    const LONG_QUESTIONS = [
+      // Category 1: Social relations — A. Friendships (1–8)
+      { id: 1, categoryId: 'social', subheader: 'A. Friendships', text: 'How often do you take photos or videos when you are with your friends?' },
+      { id: 2, categoryId: 'social', subheader: 'A. Friendships', text: 'How often do you rely on your friends’ social media posts to stay updated on their lives?' },
+      { id: 3, categoryId: 'social', subheader: 'A. Friendships', text: 'How often have you met friends through social media first, including people you initially DM’d at the beginning of the year?' },
+      { id: 4, categoryId: 'social', subheader: 'A. Friendships', text: 'How often have you deliberately posted something embarrassing about a friend to get a reaction from them or others?' },
+      { id: 5, categoryId: 'social', subheader: 'A. Friendships', text: 'How often do you do photoshoots with your friends and feel disappointed when you do not get a photo you are happy with or can post?' },
+      { id: 6, categoryId: 'social', subheader: 'A. Friendships', text: 'How often do you rely on social media posts to remember birthdays?' },
+      { id: 7, categoryId: 'social', subheader: 'A. Friendships', text: 'How often have your feelings been hurt by seeing your friends post content of themselves hanging out without you?' },
+      { id: 8, categoryId: 'social', subheader: 'A. Friendships', text: 'How often have you regretted not attending an event after seeing content posted about it afterward?' },
+
+      // Category 1: Social relations — B. Romantic relationships (9–16)
+      { id: 9, categoryId: 'social', subheader: 'B. Romantic relationships', text: 'How often do you make moves on someone through social media, such as liking their story or sliding into their DMs?' },
+      { id: 10, categoryId: 'social', subheader: 'B. Romantic relationships', text: 'How often do you agree with or apply social media phrases such as “if he wanted to, he would” and “bare minimum vs. princess treatment” when evaluating romantic relationships?' },
+      { id: 11, categoryId: 'social', subheader: 'B. Romantic relationships', text: 'How often do you take someone\'s response time into account during the talking stage, such as leaving them on delivered for longer because they did not respond right away?' },
+      { id: 12, categoryId: 'social', subheader: 'B. Romantic relationships', text: 'How often do you conduct an online deep dive into people you are interested in, such as checking who they follow, which posts they like, or their presence on other platforms, including their family members\' accounts?' },
+      { id: 13, categoryId: 'social', subheader: 'B. Romantic relationships', text: 'How often are your perceptions of red flags, green flags, and “icks” influenced by social media?' },
+      { id: 14, categoryId: 'social', subheader: 'B. Romantic relationships', text: 'How often do you soft-launch a romantic relationship or someone you are interested in on social media?' },
+      { id: 15, categoryId: 'social', subheader: 'B. Romantic relationships', text: 'How often have you posted something on social media to get a reaction from someone?' },
+      { id: 16, categoryId: 'social', subheader: 'B. Romantic relationships', text: 'How often have you edited your Close Friends list to include only one person in order to target a reaction to a specific story?' },
+
+      // Category 2: Style, presentation, and taste (17–21)
+      { id: 17, categoryId: 'style', subheader: null, text: 'How often do you use saved folders or Pinterest boards as sources of inspiration?' },
+      { id: 18, categoryId: 'style', subheader: null, text: 'How often does a movie or TV show going viral on social media make you more likely to watch it, such as Off Campus or Heated Rivalry?' },
+      { id: 19, categoryId: 'style', subheader: null, text: 'How often has social media discourse about protein and fibre influenced the way you cook?' },
+      { id: 20, categoryId: 'style', subheader: null, text: 'How often have you considered or purchased a product because of an influencer?' },
+      { id: 21, categoryId: 'style', subheader: null, text: 'How often do you discover new music through social media?' },
+
+      // Category 3: Language (22–26)
+      { id: 22, categoryId: 'language', subheader: null, text: 'How often do you laugh when you hear “67”?' },
+      { id: 23, categoryId: 'language', subheader: null, text: 'How often do you insert the word “kirk” into words that do not involve Charlie Kirk?' },
+      { id: 24, categoryId: 'language', subheader: null, text: 'How often do you use words or expressions such as “cooked,” “crashout,” “brainrotted,” “lowkey/highkey,” in your everyday vocabulary?' },
+      { id: 25, categoryId: 'language', subheader: null, text: 'How often do you use words or expressions such as “boomboclaat” and “ahh” in your everyday vocabulary?' },
+      { id: 26, categoryId: 'language', subheader: null, text: 'How often do you need to explain your jokes because they refer to niche social media content?' },
+
+      // Category 4: Self-perception (27–29)
+      { id: 27, categoryId: 'self', subheader: null, text: 'How often have you stopped or changed a habit because of social media content that presented an opposing viewpoint?' },
+      { id: 28, categoryId: 'self', subheader: null, text: 'How often do you feel great, validated, or proud when one of your posts receives a certain amount of engagement?' },
+      { id: 29, categoryId: 'self', subheader: null, text: 'How often do you take it personally when someone you expected to react to your content does not engage with it?' },
+
+      // Category 5: Public perception (30–36)
+      { id: 30, categoryId: 'public', subheader: null, text: 'How often do you unlike reels to prevent others from seeing the content you consume?' },
+      { id: 31, categoryId: 'public', subheader: null, text: 'How often do you pay attention to your follower-to-following ratio?' },
+      { id: 32, categoryId: 'public', subheader: null, text: 'How often do you post on a private story or a secondary/“coloc” account?' },
+      { id: 33, categoryId: 'public', subheader: null, text: 'How often do you look through other people\'s reposts or discuss their reposts with others?' },
+      { id: 34, categoryId: 'public', subheader: null, text: 'How often have you removed photos from your tagged posts because you felt embarrassed by them?' },
+      { id: 35, categoryId: 'public', subheader: null, text: 'How often do you avoid following certain accounts because you do not want other people to see that you follow them?' },
+      { id: 36, categoryId: 'public', subheader: null, text: 'How often have you unliked a post or deliberately chosen not to like it because it had a low number of likes or comments?' },
+
+      // Category 6: Politics (37–41)
+      { id: 37, categoryId: 'politics', subheader: null, text: 'How often do you repost political content to signal that you are informed or support a particular side without having actively researched or engaged with the topic outside social media?' },
+      { id: 38, categoryId: 'politics', subheader: null, text: 'How often do you consider engaging with political content on social media to be a form of political mobilization?' },
+      { id: 39, categoryId: 'politics', subheader: null, text: 'How often do you skip political content because you find the subject boring or want to switch off mentally for a while?' },
+      { id: 40, categoryId: 'politics', subheader: null, text: 'How often do you react impulsively to political content before checking the source or reflecting on its credibility?' },
+      { id: 41, categoryId: 'politics', subheader: null, text: 'How often have you laughed at or sent someone a meme about a serious political issue, such as the Epstein scandal, Charlie Kirk\'s assassination, or Palestine?' }
+    ];
+
+    const FLASH_QUESTIONS = [
+      // Category 1: Social relations — A. Friendships (1–3)
+      { id: 101, categoryId: 'social', subheader: 'A. Friendships', text: 'How often do you rely on your friends’ social media posts to stay updated on their lives?' },
+      { id: 102, categoryId: 'social', subheader: 'A. Friendships', text: 'How often do you do photoshoots with your friends and feel disappointed when you do not get a photo you are happy with or can post?' },
+      { id: 103, categoryId: 'social', subheader: 'A. Friendships', text: 'How often have your feelings been hurt by seeing your friends post content of themselves hanging out without you?' },
+
+      // Category 1: Social relations — B. Romantic relationships (4–6)
+      { id: 104, categoryId: 'social', subheader: 'B. Romantic relationships', text: 'How often do you make moves on someone through social media, such as liking their story or sliding into their DMs?' },
+      { id: 105, categoryId: 'social', subheader: 'B. Romantic relationships', text: 'How often do you conduct an online deep dive into people you are interested in, such as checking who they follow, which posts they like, or their presence on other platforms, including their family members\' accounts?' },
+      { id: 106, categoryId: 'social', subheader: 'B. Romantic relationships', text: 'How often do you soft-launch a romantic relationship or someone you are interested in on social media?' },
+
+      // Category 2: Style, presentation, and taste (7–8)
+      { id: 107, categoryId: 'style', subheader: null, text: 'How often does a movie or TV show going viral on social media make you more likely to watch it, such as Off Campus or Heated Rivalry?' },
+      { id: 108, categoryId: 'style', subheader: null, text: 'How often have you considered or purchased a product because of an influencer?' },
+
+      // Category 3: Language (9–12)
+      { id: 109, categoryId: 'language', subheader: null, text: 'How often do you laugh when you hear “67”?' },
+      { id: 110, categoryId: 'language', subheader: null, text: 'How often do you insert the word “kirk” into words that do not involve Charlie Kirk?' },
+      { id: 111, categoryId: 'language', subheader: null, text: 'How often do you use words or expressions such as “cooked,” “crashout,” “brainrotted,” “lowkey/highkey,” in your everyday vocabulary?' },
+      { id: 112, categoryId: 'language', subheader: null, text: 'How often do you need to explain your jokes because they refer to niche social media content?' },
+
+      // Category 4: Self-perception (13–14)
+      { id: 113, categoryId: 'self', subheader: null, text: 'How often have you stopped or changed a habit because of social media content that presented an opposing viewpoint?' },
+      { id: 114, categoryId: 'self', subheader: null, text: 'How often do you feel great, validated, or proud when one of your posts receives a certain amount of engagement?' },
+
+      // Category 5: Public perception (15–17)
+      { id: 115, categoryId: 'public', subheader: null, text: 'How often do you pay attention to your follower-to-following ratio?' },
+      { id: 116, categoryId: 'public', subheader: null, text: 'How often do you look through other people\'s reposts or discuss their reposts with others?' },
+      { id: 117, categoryId: 'public', subheader: null, text: 'How often do you avoid following certain accounts because you do not want other people to see that you follow them?' },
+
+      // Category 6: Politics (18–20)
+      { id: 118, categoryId: 'politics', subheader: null, text: 'How often do you repost political content to signal that you are informed or support a particular side without having actively researched or engaged with the topic outside social media?' },
+      { id: 119, categoryId: 'politics', subheader: null, text: 'How often do you react impulsively to political content before checking the source or reflecting on its credibility?' },
+      { id: 120, categoryId: 'politics', subheader: null, text: 'How often have you laughed at or sent someone a meme about a serious political issue, such as the Epstein scandal, Charlie Kirk\'s assassination, or Palestine?' }
+    ];
+
+    const SCALE_OPTIONS = [
+      { score: 1, label: 'Never' },
+      { score: 2, label: 'Rarely' },
+      { score: 3, label: 'Sometimes' },
+      { score: 4, label: 'Frequently' },
+      { score: 5, label: 'Usually' }
+    ];
+
+    const COOKNESS_TIERS = [
+      {
+        min: 0,
+        max: 20,
+        title: 'Unplugged / Raw',
+        description: 'You remain largely impervious to algorithmic norms. Your habits, language, and relationships operate predominantly offline, with minimal secondary socialisation from digital feeds.'
+      },
+      {
+        min: 21,
+        max: 40,
+        title: 'Lightly Toasted',
+        description: 'You use social media as a tool rather than an environment. While you recognize internet trends and norms, they rarely dictate your self-worth or daily interactions.'
+      },
+      {
+        min: 41,
+        max: 60,
+        title: 'Simmering',
+        description: 'You negotiate a constant balance between offline authenticity and online expectations. Social media noticeably shapes your tastes, references, and relationship rituals.'
+      },
+      {
+        min: 61,
+        max: 80,
+        title: 'Well Done',
+        description: 'Digital norms are deeply woven into how you socialize, speak, and curate your identity. The platform gaze frequently guides your everyday choices and perceptions.'
+      },
+      {
+        min: 81,
+        max: 100,
+        title: 'Completely Cooked',
+        description: 'Hyper-socialised by the algorithm. Your vocabulary, relationship rules, taste formation, and self-perception are thoroughly mediated by internet culture and mutual digital surveillance.'
+      }
+    ];
+
+    // =========================================================================
+    // 4. APPLICATION STATE & 8-BIT CHIPTUNE SYNTHESIZER
+    // =========================================================================
+    let quizMode = 'long'; // 'flash' (20 Qs) | 'long' (41 Qs)
+    let currentView = 'landing'; // 'landing' | 'avatar' | 'quiz' | 'results'
+    let currentQuestionIndex = 0;
+    let userAnswers = {}; // { questionId: score (1..5) }
+    let autoAdvanceTimeout = null;
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function getActiveQuestions() {
+      return quizMode === 'flash' ? FLASH_QUESTIONS : LONG_QUESTIONS;
+    }
+
+    function setQuizMode(mode, announce = true) {
+      quizMode = mode === 'flash' ? 'flash' : 'long';
+      userAnswers = {};
+      currentQuestionIndex = 0;
+
+      const flashBtn = document.getElementById('modeFlashBtn');
+      const longBtn = document.getElementById('modeLongBtn');
+      const flashCheck = document.getElementById('modeFlashCheck');
+      const longCheck = document.getElementById('modeLongCheck');
+      const questCountEl = document.getElementById('landingQuestCountText');
+      const timeLimitEl = document.getElementById('landingTimeLimitText');
+      const totalItemsEl = document.getElementById('quizTotalItemsText');
+
+      if (quizMode === 'flash') {
+        if (flashBtn) {
+          flashBtn.classList.remove('bg-zinc-100');
+          flashBtn.classList.add('bg-mario-green-light');
+        }
+        if (longBtn) {
+          longBtn.classList.remove('bg-mario-green-light');
+          longBtn.classList.add('bg-zinc-100');
+        }
+        if (flashCheck) flashCheck.classList.remove('hidden');
+        if (longCheck) longCheck.classList.add('hidden');
+        if (questCountEl) questCountEl.textContent = '20 Qs · 6 Worlds';
+        if (timeLimitEl) timeLimitEl.textContent = '~2 Minutes';
+        if (totalItemsEl) totalItemsEl.textContent = '20 ITEMS TOTAL';
+        if (announce) {
+          playCoinSound();
+          setZuckSpeech('FLASH MODE (20 QS)! FAST BRAINROT!');
+        }
+      } else {
+        if (longBtn) {
+          longBtn.classList.remove('bg-zinc-100');
+          longBtn.classList.add('bg-mario-green-light');
+        }
+        if (flashBtn) {
+          flashBtn.classList.remove('bg-mario-green-light');
+          flashBtn.classList.add('bg-zinc-100');
+        }
+        if (longCheck) longCheck.classList.remove('hidden');
+        if (flashCheck) flashCheck.classList.add('hidden');
+        if (questCountEl) questCountEl.textContent = '41 Qs · 6 Worlds';
+        if (timeLimitEl) timeLimitEl.textContent = '~4 Minutes';
+        if (totalItemsEl) totalItemsEl.textContent = '41 ITEMS TOTAL';
+        if (announce) {
+          playCoinSound();
+          setZuckSpeech('CHAD MODE (41 QS)! MAXIMUM DATA!');
+        }
+      }
+
+      syncDollarStackDisplay();
+      updateZuckProgressPosition(false);
+    }
+
+    // Purely Aesthetic Player Avatar State (Never alters quiz scoring)
+    let playerName = 'PLAYER 1';
+
+    const AVATAR_GENDERS = [
+      { id: 'male', label: 'Male' },
+      { id: 'female', label: 'Female' },
+      { id: 'nonbinary', label: 'Non-Binary' }
+    ];
+
+    const AVATAR_SKIN_TONES = [
+      { id: 'porcelain', label: 'Porcelain', base: '#FDE2D2', shade: '#E0AC8E', highlight: '#FFF3EB' },
+      { id: 'beige', label: 'Warm Beige', base: '#F1C29B', shade: '#CC9160', highlight: '#FCE0C5' },
+      { id: 'olive', label: 'Olive Tan', base: '#D59C6A', shade: '#AB703E', highlight: '#E8B88C' },
+      { id: 'brown', label: 'Rich Brown', base: '#9A5B34', shade: '#6E3B1B', highlight: '#B87449' },
+      { id: 'espresso', label: 'Espresso', base: '#59311B', shade: '#361A0B', highlight: '#78462A' }
+    ];
+
+    const AVATAR_FACE_SHAPES = [
+      { id: 'round', label: 'Round' },
+      { id: 'square', label: 'Square' },
+      { id: 'oval', label: 'Oval' },
+      { id: 'heart', label: 'Heart' },
+      { id: 'chiseled', label: 'Chiseled' }
+    ];
+
+    const AVATAR_HAIR_STYLES = [
+      { id: 'short', label: 'Short Crop' },
+      { id: 'long', label: 'Long Flowing' },
+      { id: 'afro', label: 'Curly Afro' },
+      { id: 'spikes', label: 'Messy Spikes' },
+      { id: 'bob', label: 'Sleek Bob' }
+    ];
+
+    const AVATAR_EYE_COLORS = [
+      { id: 'brown', label: 'Brown', hex: '#5C3317' },
+      { id: 'blue', label: 'Blue', hex: '#2563EB' },
+      { id: 'green', label: 'Green', hex: '#16A34A' },
+      { id: 'hazel', label: 'Hazel', hex: '#A16207' },
+      { id: 'black', label: 'Black', hex: '#111111' }
+    ];
+
+    let playerAvatar = {
+      gender: 'male',
+      skin: 'beige',
+      face: 'oval',
+      hair: 'short',
+      eyes: 'brown'
+    };
+
+    // Mark Zuckerberg Floor Patrol & Reaction Timers
+    let zuckX = 18;
+    // Mark Zuckerberg Progress-Bar Position & Reaction Timers
+    let zuckWalkFrame = 0;
+    let zuckReactionTimer = null;
+    let zuckLizardTimer = null;
+    let zuckFinaleActive = false;
+
+    // Live Firestore Cohort State (Strictly real documents only — NO fake baseline)
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+    let liveCohortResponses = []; // Array of real documents from Firestore
+    let lastSubmittedResult = null; // Holds user's computed result object
+
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'are-you-cooked-sciences-po';
+
+    // Synthesized 8-Bit Web Audio Engine (Zero External Sound URLs)
+    function ensureAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playTone(freq, duration, type = 'square', delay = 0, gainVal = 0.08) {
+      if (!soundEnabled) return;
+      try {
+        ensureAudioContext();
+        if (!audioCtx) return;
+
+        const now = audioCtx.currentTime + delay;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+
+        gain.gain.setValueAtTime(gainVal, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + duration);
+      } catch (e) {
+        // Ignore audio autoplay blocks gracefully
+      }
+    }
+
+    function playCoinSound() {
+      // Classic Super Mario Coin B5 -> E6 chime
+      playTone(987.77, 0.08, 'square', 0, 0.08);
+      playTone(1318.51, 0.28, 'square', 0.075, 0.08);
+    }
+
+    function playSadSound() {
+      // Classic descending 8-bit sad wah / pipe tone
+      playTone(392.00, 0.12, 'sawtooth', 0, 0.07);
+      playTone(369.99, 0.12, 'sawtooth', 0.11, 0.07);
+      playTone(349.23, 0.12, 'sawtooth', 0.22, 0.07);
+      playTone(311.13, 0.28, 'sawtooth', 0.33, 0.07);
+    }
+
+    function playNeutralSound() {
+      playTone(523.25, 0.09, 'square', 0, 0.05);
+    }
+
+    function playStartFanfare() {
+      playTone(523.25, 0.09, 'square', 0, 0.08);
+      playTone(659.25, 0.09, 'square', 0.09, 0.08);
+      playTone(783.99, 0.09, 'square', 0.18, 0.08);
+      playTone(1046.50, 0.24, 'square', 0.27, 0.09);
+    }
+
+    function initSoundToggle() {
+      const btn = document.getElementById('soundToggleBtn');
+      const iconOn = document.getElementById('soundIconOn');
+      const iconOff = document.getElementById('soundIconOff');
+      const label = document.getElementById('soundLabelText');
+
+      btn.addEventListener('click', () => {
+        soundEnabled = !soundEnabled;
+        if (soundEnabled) {
+          iconOn.classList.remove('hidden');
+          iconOff.classList.add('hidden');
+          label.textContent = 'SFX:ON';
+          playNeutralSound();
+        } else {
+          iconOn.classList.add('hidden');
+          iconOff.classList.remove('hidden');
+          label.textContent = 'SFX:OFF';
+        }
+      });
+    }
+
+    // =========================================================================
+    // 5B. 8-BIT PLAYER AVATAR RENDERER (64x64 DOUBLED PIXEL RATIO & 5 COOK DEGREES)
+    // =========================================================================
+    function getCookDegreeFromPercent(pct) {
+      if (pct <= 20) return 1;
+      if (pct <= 40) return 2;
+      if (pct <= 60) return 3;
+      if (pct <= 80) return 4;
+      return 5;
+    }
+
+    const COOK_DEGREE_LABELS = {
+      1: 'DEGREE 1: NOT BURNT',
+      2: 'DEGREE 2: SLIGHTLY PINK',
+      3: 'DEGREE 3: STEAMING & IN PAIN',
+      4: 'DEGREE 4: BURNING IN FLAMES',
+      5: 'DEGREE 5: BURNT SKULL'
+    };
+
+    function getSanitizedPlayerName() {
+      const cleaned = (playerName || '').trim().toUpperCase();
+      return cleaned.length > 0 ? cleaned : 'PLAYER 1';
+    }
+
+    function syncPlayerNameInputs(newName) {
+      playerName = newName;
+      const landingInput = document.getElementById('landingPlayerNameInput');
+      const avatarInput = document.getElementById('avatarPlayerNameInput');
+      if (landingInput && landingInput.value !== newName) landingInput.value = newName;
+      if (avatarInput && avatarInput.value !== newName) avatarInput.value = newName;
+      const quizNameLabel = document.getElementById('quizPlayerNameLabel');
+      if (quizNameLabel) quizNameLabel.textContent = getSanitizedPlayerName();
+    }
+
+    function renderPlayerAvatarSVG(config, cookDegree = 1, sizePx = 148) {
+      const skinObj = AVATAR_SKIN_TONES.find((s) => s.id === config.skin) || AVATAR_SKIN_TONES[1];
+      const eyeObj = AVATAR_EYE_COLORS.find((e) => e.id === config.eyes) || AVATAR_EYE_COLORS[0];
+
+      // Determine skin & hair palette by Cook Degree (1..5)
+      let skinBase = skinObj.base;
+      let skinShade = skinObj.shade;
+      let skinHighlight = skinObj.highlight;
+      let hairMain = '#4A2E1B';
+      let hairDark = '#2B190D';
+      let hairHighlight = '#7D5130';
+
+      if (cookDegree === 2) {
+        // 2. Slightly pink skin, hesitant face
+        skinBase = '#FBB6C4';
+        skinShade = '#DF8096';
+        skinHighlight = '#FFDCE4';
+      } else if (cookDegree === 3) {
+        // 3. Normal skin tone (no redness on head!), pained expression + steam fuming in background
+        skinBase = skinObj.base;
+        skinShade = skinObj.shade;
+        skinHighlight = skinObj.highlight;
+      } else if (cookDegree === 4) {
+        // 4. Fully red skin and burnt hair, not smiling at all + flames burning in background
+        skinBase = '#B91C1C';
+        skinShade = '#7F1D1D';
+        skinHighlight = '#DC2626';
+        hairMain = '#18181B';
+        hairDark = '#09090B';
+        hairHighlight = '#3F3F46';
+      }
+
+      // DEGREE 5: No skin on, only a black burnt skull (64x64 High-Detail Pixel Art)
+      if (cookDegree === 5) {
+        return `
+          <svg width="${sizePx}" height="${sizePx}" viewBox="0 0 64 64" class="w-full h-full" shape-rendering="crispEdges">
+            <!-- Rising Pixel Smoke Plumes -->
+            <rect class="smoke-wisp" x="17" y="2" width="3" height="5" fill="#71717A"/>
+            <rect class="smoke-wisp" x="19" y="0" width="2" height="3" fill="#A1A1AA"/>
+            <rect class="smoke-wisp" x="42" y="3" width="3" height="5" fill="#52525B"/>
+            <rect class="smoke-wisp" x="44" y="1" width="2" height="3" fill="#71717A"/>
+            <rect class="smoke-wisp" x="30" y="0" width="4" height="4" fill="#A1A1AA"/>
+
+            <!-- Charred Black Cranium Outline & Dome -->
+            <rect x="20" y="7" width="24" height="3" fill="#09090B"/>
+            <rect x="16" y="10" width="32" height="4" fill="#18181B"/>
+            <rect x="14" y="14" width="36" height="20" fill="#18181B"/>
+            <rect x="13" y="17" width="38" height="14" fill="#18181B"/>
+            <!-- Cranium Outer Pixel Border -->
+            <rect x="16" y="9" width="4" height="2" fill="#09090B"/>
+            <rect x="44" y="9" width="4" height="2" fill="#09090B"/>
+            <rect x="14" y="11" width="2" height="4" fill="#09090B"/>
+            <rect x="48" y="11" width="2" height="4" fill="#09090B"/>
+            <rect x="12" y="15" width="2" height="17" fill="#09090B"/>
+            <rect x="50" y="15" width="2" height="17" fill="#09090B"/>
+
+            <!-- Ash-Gray Cranium Highlights & Fracture Cracks -->
+            <rect x="19" y="12" width="9" height="3" fill="#3F3F46"/>
+            <rect x="21" y="11" width="5" height="1" fill="#52525B"/>
+            <rect x="38" y="14" width="6" height="3" fill="#27272A"/>
+            <rect x="30" y="9" width="2" height="6" fill="#09090B"/>
+            <rect x="32" y="14" width="2" height="4" fill="#09090B"/>
+            <rect x="28" y="16" width="2" height="3" fill="#09090B"/>
+
+            <!-- Prominent Zygomatic Cheekbones -->
+            <rect x="14" y="32" width="36" height="7" fill="#27272A"/>
+            <rect x="12" y="32" width="3" height="6" fill="#09090B"/>
+            <rect x="49" y="32" width="3" height="6" fill="#09090B"/>
+            <rect x="16" y="33" width="5" height="2" fill="#3F3F46"/>
+            <rect x="43" y="33" width="5" height="2" fill="#3F3F46"/>
+
+            <!-- Deep Hollow Black Eye Sockets -->
+            <rect x="19" y="23" width="9" height="8" fill="#000000"/>
+            <rect x="36" y="23" width="9" height="8" fill="#000000"/>
+            <rect x="18" y="24" width="1" height="6" fill="#09090B"/>
+            <rect x="45" y="24" width="1" height="6" fill="#09090B"/>
+            <!-- Faint Glowing Ember Pinpoints inside Sockets -->
+            <rect x="22" y="26" width="2" height="2" fill="#EF4444"/>
+            <rect x="40" y="26" width="2" height="2" fill="#EF4444"/>
+
+            <!-- Triangular Nasal Cavity -->
+            <rect x="30" y="31" width="4" height="3" fill="#000000"/>
+            <rect x="29" y="34" width="6" height="4" fill="#000000"/>
+            <rect x="31" y="32" width="2" height="5" fill="#09090B"/>
+
+            <!-- Narrowed Skeletal Mandible / Jaw -->
+            <rect x="19" y="39" width="26" height="14" fill="#18181B"/>
+            <rect x="21" y="52" width="22" height="3" fill="#09090B"/>
+            <rect x="18" y="39" width="2" height="12" fill="#09090B"/>
+            <rect x="44" y="39" width="2" height="12" fill="#09090B"/>
+
+            <!-- Exposed Charred Bone Teeth (Upper & Lower Rows) -->
+            <rect x="21" y="41" width="22" height="9" fill="#000000"/>
+            <rect x="23" y="42" width="2" height="3" fill="#D4D4D8"/>
+            <rect x="27" y="42" width="2" height="3" fill="#A1A1AA"/>
+            <rect x="31" y="42" width="2" height="3" fill="#D4D4D8"/>
+            <rect x="35" y="42" width="2" height="3" fill="#A1A1AA"/>
+            <rect x="39" y="42" width="2" height="3" fill="#D4D4D8"/>
+            <rect x="23" y="46" width="2" height="3" fill="#A1A1AA"/>
+            <rect x="27" y="46" width="2" height="3" fill="#D4D4D8"/>
+            <rect x="31" y="46" width="2" height="3" fill="#A1A1AA"/>
+            <rect x="35" y="46" width="2" height="3" fill="#D4D4D8"/>
+            <rect x="39" y="46" width="2" height="3" fill="#A1A1AA"/>
+
+            <!-- Cervical Vertebrae & Charred Collarbones -->
+            <rect x="26" y="55" width="12" height="9" fill="#09090B"/>
+            <rect x="28" y="56" width="3" height="3" fill="#3F3F46"/>
+            <rect x="33" y="56" width="3" height="3" fill="#3F3F46"/>
+            <rect x="28" y="60" width="3" height="3" fill="#27272A"/>
+            <rect x="33" y="60" width="3" height="3" fill="#27272A"/>
+          </svg>
+        `;
+      }
+
+      // Build 64x64 Sculpted Face Shape Pixels (Degrees 1..4)
+      let faceSvg = '';
+      if (config.face === 'round') {
+        faceSvg = `
+          <rect x="16" y="17" width="32" height="29" fill="${skinBase}"/>
+          <rect x="18" y="46" width="28" height="4" fill="${skinBase}"/>
+          <rect x="22" y="50" width="20" height="2" fill="${skinShade}"/>
+          <!-- Forehead & Cheek Highlights -->
+          <rect x="20" y="20" width="10" height="2" fill="${skinHighlight}"/>
+          <rect x="17" y="34" width="3" height="3" fill="${skinHighlight}"/>
+          <rect x="44" y="34" width="3" height="3" fill="${skinHighlight}"/>
+          <!-- Crisp Pixel Outlines -->
+          <rect x="14" y="20" width="2" height="24" fill="#111111"/>
+          <rect x="48" y="20" width="2" height="24" fill="#111111"/>
+          <rect x="16" y="44" width="2" height="4" fill="#111111"/>
+          <rect x="46" y="44" width="2" height="4" fill="#111111"/>
+          <rect x="18" y="48" width="4" height="2" fill="#111111"/>
+          <rect x="42" y="48" width="4" height="2" fill="#111111"/>
+          <rect x="22" y="52" width="20" height="2" fill="#111111"/>
+        `;
+      } else if (config.face === 'square') {
+        faceSvg = `
+          <rect x="16" y="17" width="32" height="33" fill="${skinBase}"/>
+          <rect x="16" y="48" width="32" height="2" fill="${skinShade}"/>
+          <rect x="20" y="20" width="12" height="2" fill="${skinHighlight}"/>
+          <rect x="14" y="18" width="2" height="32" fill="#111111"/>
+          <rect x="48" y="18" width="2" height="32" fill="#111111"/>
+          <rect x="16" y="50" width="32" height="2" fill="#111111"/>
+        `;
+      } else if (config.face === 'heart') {
+        faceSvg = `
+          <rect x="16" y="17" width="32" height="19" fill="${skinBase}"/>
+          <rect x="18" y="36" width="28" height="6" fill="${skinBase}"/>
+          <rect x="21" y="42" width="22" height="5" fill="${skinBase}"/>
+          <rect x="25" y="47" width="14" height="4" fill="${skinShade}"/>
+          <rect x="20" y="20" width="10" height="2" fill="${skinHighlight}"/>
+          <rect x="14" y="18" width="2" height="18" fill="#111111"/>
+          <rect x="48" y="18" width="2" height="18" fill="#111111"/>
+          <rect x="16" y="36" width="2" height="6" fill="#111111"/>
+          <rect x="46" y="36" width="2" height="6" fill="#111111"/>
+          <rect x="18" y="42" width="3" height="5" fill="#111111"/>
+          <rect x="43" y="42" width="3" height="5" fill="#111111"/>
+          <rect x="21" y="47" width="4" height="3" fill="#111111"/>
+          <rect x="39" y="47" width="4" height="3" fill="#111111"/>
+          <rect x="25" y="51" width="14" height="2" fill="#111111"/>
+        `;
+      } else if (config.face === 'chiseled') {
+        faceSvg = `
+          <rect x="16" y="17" width="32" height="17" fill="${skinBase}"/>
+          <rect x="18" y="34" width="28" height="8" fill="${skinBase}"/>
+          <rect x="20" y="42" width="24" height="8" fill="${skinBase}"/>
+          <rect x="20" y="48" width="24" height="2" fill="${skinShade}"/>
+          <rect x="20" y="20" width="11" height="2" fill="${skinHighlight}"/>
+          <rect x="14" y="18" width="2" height="16" fill="#111111"/>
+          <rect x="48" y="18" width="2" height="16" fill="#111111"/>
+          <rect x="16" y="34" width="2" height="8" fill="#111111"/>
+          <rect x="46" y="34" width="2" height="8" fill="#111111"/>
+          <rect x="18" y="42" width="2" height="8" fill="#111111"/>
+          <rect x="44" y="42" width="2" height="8" fill="#111111"/>
+          <rect x="20" y="50" width="24" height="2" fill="#111111"/>
+        `;
+      } else {
+        // Default: oval
+        faceSvg = `
+          <rect x="17" y="16" width="30" height="32" fill="${skinBase}"/>
+          <rect x="19" y="48" width="26" height="3" fill="${skinBase}"/>
+          <rect x="23" y="50" width="18" height="2" fill="${skinShade}"/>
+          <rect x="20" y="19" width="11" height="2" fill="${skinHighlight}"/>
+          <rect x="15" y="18" width="2" height="30" fill="#111111"/>
+          <rect x="47" y="18" width="2" height="30" fill="#111111"/>
+          <rect x="17" y="48" width="2" height="2" fill="#111111"/>
+          <rect x="45" y="48" width="2" height="2" fill="#111111"/>
+          <rect x="19" y="50" width="4" height="2" fill="#111111"/>
+          <rect x="41" y="50" width="4" height="2" fill="#111111"/>
+          <rect x="23" y="52" width="18" height="2" fill="#111111"/>
+        `;
+      }
+
+      // Ears with inner ear contour (64x64)
+      const earsSvg = `
+        <rect x="12" y="27" width="3" height="8" fill="${skinBase}"/>
+        <rect x="13" y="29" width="1" height="4" fill="${skinShade}"/>
+        <rect x="11" y="28" width="1" height="6" fill="#111111"/>
+        <rect x="49" y="27" width="3" height="8" fill="${skinBase}"/>
+        <rect x="50" y="29" width="1" height="4" fill="${skinShade}"/>
+        <rect x="52" y="28" width="1" height="6" fill="#111111"/>
+      `;
+
+      // Gender Styling (Eyelashes, Earrings, Detailed Pixel Shirts)
+      let genderAccentsSvg = '';
+      if (config.gender === 'female') {
+        genderAccentsSvg = `
+          <!-- Eyelashes -->
+          <rect x="19" y="27" width="2" height="1" fill="#111111"/>
+          <rect x="20" y="26" width="1" height="1" fill="#111111"/>
+          <rect x="43" y="27" width="2" height="1" fill="#111111"/>
+          <rect x="43" y="26" width="1" height="1" fill="#111111"/>
+          <!-- Arcade Pink Top & Gold Studs -->
+          <rect x="12" y="34" width="2" height="2" fill="#FCE844"/>
+          <rect x="50" y="34" width="2" height="2" fill="#FCE844"/>
+          <rect x="14" y="56" width="36" height="8" fill="#FF47A3"/>
+          <rect x="14" y="55" width="36" height="1" fill="#111111"/>
+          <rect x="25" y="56" width="14" height="4" fill="${skinShade}"/>
+          <rect x="27" y="56" width="10" height="3" fill="${skinBase}"/>
+        `;
+      } else if (config.gender === 'nonbinary') {
+        genderAccentsSvg = `
+          <!-- Dangle Pixel Earrings -->
+          <rect x="12" y="35" width="2" height="4" fill="#FCE844"/>
+          <rect x="50" y="35" width="2" height="4" fill="#FCE844"/>
+          <!-- Violet & Gold Striped Sweater -->
+          <rect x="14" y="56" width="36" height="8" fill="#7C3AED"/>
+          <rect x="14" y="55" width="36" height="1" fill="#111111"/>
+          <rect x="14" y="59" width="36" height="2" fill="#FCE844"/>
+          <rect x="26" y="56" width="12" height="2" fill="${skinShade}"/>
+        `;
+      } else {
+        genderAccentsSvg = `
+          <!-- Royal Blue Crewneck & Collar -->
+          <rect x="14" y="56" width="36" height="8" fill="#2563EB"/>
+          <rect x="14" y="55" width="36" height="1" fill="#111111"/>
+          <rect x="24" y="56" width="16" height="3" fill="#1D4ED8"/>
+          <rect x="26" y="56" width="12" height="2" fill="${skinShade}"/>
+        `;
+      }
+
+      // High-Visibility Eyebrows, Eye Gaze & Facial Expression by Cook Degree (1..4)
+      let browsSvg = '';
+      let eyesDetailSvg = `
+        <!-- Detailed 6x5 Eyes with Sclera, Chosen Iris, Dark Pupil & Catchlight -->
+        <rect x="21" y="27" width="7" height="5" fill="#FFFFFF"/>
+        <rect x="36" y="27" width="7" height="5" fill="#FFFFFF"/>
+        <rect x="21" y="26" width="7" height="1" fill="#111111"/>
+        <rect x="36" y="26" width="7" height="1" fill="#111111"/>
+        <rect x="23" y="27" width="4" height="5" fill="${eyeObj.hex}"/>
+        <rect x="38" y="27" width="4" height="5" fill="${eyeObj.hex}"/>
+        <rect x="24" y="28" width="2" height="3" fill="#111111"/>
+        <rect x="39" y="28" width="2" height="3" fill="#111111"/>
+        <rect x="23" y="28" width="1" height="1" fill="#FFFFFF"/>
+        <rect x="38" y="28" width="1" height="1" fill="#FFFFFF"/>
+      `;
+      let expressionSvg = '';
+
+      if (cookDegree === 1) {
+        // 1. Not burnt at all, smiling (Big, warm, unmistakable pixel smile + rosy cheeks)
+        browsSvg = `
+          <rect x="20" y="23" width="8" height="2" fill="#111111"/>
+          <rect x="36" y="23" width="8" height="2" fill="#111111"/>
+        `;
+        expressionSvg = `
+          <!-- Rosy Cheeks -->
+          <rect x="18" y="36" width="4" height="2" fill="#F472B6" fill-opacity="0.55"/>
+          <rect x="42" y="36" width="4" height="2" fill="#F472B6" fill-opacity="0.55"/>
+          <!-- Wide Happy Upturned Smile -->
+          <rect x="22" y="40" width="2" height="2" fill="#111111"/>
+          <rect x="40" y="40" width="2" height="2" fill="#111111"/>
+          <rect x="24" y="42" width="2" height="2" fill="#111111"/>
+          <rect x="38" y="42" width="2" height="2" fill="#111111"/>
+          <rect x="26" y="43" width="12" height="2" fill="#111111"/>
+          <rect x="26" y="42" width="12" height="1" fill="#FFFFFF"/>
+        `;
+      } else if (cookDegree === 2) {
+        // 2. Slightly pink skin, hesitant face (Asymmetrical worried brows, side glance, sweat bead, wavy hesitant mouth)
+        browsSvg = `
+          <!-- Left brow raised nervously, right brow tilted down -->
+          <rect x="20" y="21" width="5" height="2" fill="#111111"/>
+          <rect x="25" y="22" width="3" height="2" fill="#111111"/>
+          <rect x="36" y="23" width="4" height="2" fill="#111111"/>
+          <rect x="40" y="22" width="4" height="2" fill="#111111"/>
+        `;
+        eyesDetailSvg = `
+          <!-- Hesitant Side-Glancing Eyes -->
+          <rect x="21" y="27" width="7" height="5" fill="#FFFFFF"/>
+          <rect x="36" y="27" width="7" height="5" fill="#FFFFFF"/>
+          <rect x="21" y="26" width="7" height="1" fill="#111111"/>
+          <rect x="36" y="26" width="7" height="1" fill="#111111"/>
+          <rect x="24" y="27" width="4" height="5" fill="${eyeObj.hex}"/>
+          <rect x="39" y="27" width="4" height="5" fill="${eyeObj.hex}"/>
+          <rect x="25" y="28" width="2" height="3" fill="#111111"/>
+          <rect x="40" y="28" width="2" height="3" fill="#111111"/>
+          <rect x="24" y="28" width="1" height="1" fill="#FFFFFF"/>
+          <rect x="39" y="28" width="1" height="1" fill="#FFFFFF"/>
+        `;
+        expressionSvg = `
+          <!-- Nervous Sweat Drop -->
+          <rect x="44" y="22" width="2" height="4" fill="#38BDF8"/>
+          <rect x="44" y="26" width="2" height="1" fill="#BAE6FD"/>
+          <!-- Wavy Hesitant / Uncertain Mouth -->
+          <rect x="23" y="43" width="4" height="2" fill="#111111"/>
+          <rect x="27" y="41" width="5" height="2" fill="#111111"/>
+          <rect x="32" y="43" width="5" height="2" fill="#111111"/>
+          <rect x="37" y="42" width="4" height="2" fill="#111111"/>
+        `;
+      } else if (cookDegree === 3) {
+        // 3. Red skin, teeth bare, facial expression in pain, awkward
+        browsSvg = `
+          <!-- Steep Furrowed Pained Eyebrows -->
+          <rect x="20" y="21" width="3" height="2" fill="#111111"/>
+          <rect x="23" y="22" width="3" height="2" fill="#111111"/>
+          <rect x="26" y="23" width="3" height="2" fill="#111111"/>
+          <rect x="35" y="23" width="3" height="2" fill="#111111"/>
+          <rect x="38" y="22" width="3" height="2" fill="#111111"/>
+          <rect x="41" y="21" width="3" height="2" fill="#111111"/>
+        `;
+        eyesDetailSvg = `
+          <!-- Strained Wincing Eyes with Tension Lines -->
+          <rect x="21" y="27" width="7" height="4" fill="#FFFFFF"/>
+          <rect x="36" y="27" width="7" height="4" fill="#FFFFFF"/>
+          <rect x="21" y="26" width="7" height="1" fill="#111111"/>
+          <rect x="36" y="26" width="7" height="1" fill="#111111"/>
+          <rect x="23" y="27" width="3" height="4" fill="${eyeObj.hex}"/>
+          <rect x="38" y="27" width="3" height="4" fill="${eyeObj.hex}"/>
+          <rect x="24" y="28" width="2" height="2" fill="#111111"/>
+          <rect x="39" y="28" width="2" height="2" fill="#111111"/>
+          <!-- Under-eye Pain Creases -->
+          <rect x="21" y="32" width="7" height="1" fill="#7F1D1D"/>
+          <rect x="36" y="32" width="7" height="1" fill="#7F1D1D"/>
+        `;
+        expressionSvg = `
+          <!-- Two Sweat Drops -->
+          <rect x="17" y="22" width="2" height="5" fill="#38BDF8"/>
+          <rect x="45" y="21" width="2" height="6" fill="#38BDF8"/>
+          <!-- Large Awkward Pain Grimace with Clenched Bare Teeth -->
+          <rect x="21" y="39" width="22" height="8" fill="#111111"/>
+          <rect x="23" y="40" width="3" height="2" fill="#FFFFFF"/>
+          <rect x="27" y="40" width="4" height="2" fill="#FFFFFF"/>
+          <rect x="33" y="40" width="4" height="2" fill="#FFFFFF"/>
+          <rect x="38" y="40" width="3" height="2" fill="#FFFFFF"/>
+          <rect x="23" y="44" width="3" height="2" fill="#FFFFFF"/>
+          <rect x="27" y="44" width="4" height="2" fill="#FFFFFF"/>
+          <rect x="33" y="44" width="4" height="2" fill="#FFFFFF"/>
+          <rect x="38" y="44" width="3" height="2" fill="#FFFFFF"/>
+        `;
+      } else {
+        // 4. Fully red skin and burnt hair, not smiling at all
+        browsSvg = `
+          <!-- Heavy Scorched Frowning Brows -->
+          <rect x="20" y="21" width="4" height="2" fill="#111111"/>
+          <rect x="24" y="22" width="4" height="2" fill="#111111"/>
+          <rect x="36" y="22" width="4" height="2" fill="#111111"/>
+          <rect x="40" y="21" width="4" height="2" fill="#111111"/>
+        `;
+        eyesDetailSvg = `
+          <!-- Hollow-Ringed Traumatized Eyes -->
+          <rect x="20" y="32" width="9" height="1" fill="#450A0A"/>
+          <rect x="35" y="32" width="9" height="1" fill="#450A0A"/>
+          <rect x="21" y="26" width="7" height="6" fill="#FFFFFF"/>
+          <rect x="36" y="26" width="7" height="6" fill="#FFFFFF"/>
+          <rect x="21" y="25" width="7" height="1" fill="#111111"/>
+          <rect x="36" y="25" width="7" height="1" fill="#111111"/>
+          <rect x="23" y="27" width="3" height="4" fill="${eyeObj.hex}"/>
+          <rect x="38" y="27" width="3" height="4" fill="${eyeObj.hex}"/>
+          <rect x="24" y="28" width="2" height="2" fill="#111111"/>
+          <rect x="39" y="28" width="2" height="2" fill="#111111"/>
+        `;
+        expressionSvg = `
+          <!-- Ash / Soot Smudges on Scorched Red Cheeks -->
+          <rect x="18" y="36" width="4" height="2" fill="#27272A" fill-opacity="0.65"/>
+          <rect x="42" y="37" width="4" height="2" fill="#27272A" fill-opacity="0.65"/>
+          <!-- Deep Unsmiling Downturned Frown -->
+          <rect x="24" y="41" width="16" height="2" fill="#111111"/>
+          <rect x="22" y="43" width="3" height="2" fill="#111111"/>
+          <rect x="39" y="43" width="3" height="2" fill="#111111"/>
+          <rect x="20" y="45" width="2" height="2" fill="#111111"/>
+          <rect x="42" y="45" width="2" height="2" fill="#111111"/>
+        `;
+      }
+
+      // Build High-Detail 64x64 Hair Styles (5 Styles)
+      let hairSvg = '';
+      if (config.hair === 'short') {
+        hairSvg = `
+          <rect x="20" y="8" width="24" height="2" fill="${hairDark}"/>
+          <rect x="17" y="10" width="30" height="8" fill="${hairMain}"/>
+          <rect x="15" y="13" width="4" height="11" fill="${hairMain}"/>
+          <rect x="45" y="13" width="4" height="11" fill="${hairMain}"/>
+          <rect x="21" y="11" width="9" height="2" fill="${hairHighlight}"/>
+          <rect x="34" y="12" width="6" height="2" fill="${hairHighlight}"/>
+          <rect x="17" y="17" width="30" height="1" fill="${hairDark}"/>
+        `;
+      } else if (config.hair === 'long') {
+        hairSvg = `
+          <rect x="19" y="7" width="26" height="3" fill="${hairDark}"/>
+          <rect x="15" y="10" width="34" height="8" fill="${hairMain}"/>
+          <rect x="11" y="14" width="6" height="38" fill="${hairMain}"/>
+          <rect x="47" y="14" width="6" height="38" fill="${hairMain}"/>
+          <rect x="10" y="16" width="1" height="34" fill="${hairDark}"/>
+          <rect x="53" y="16" width="1" height="34" fill="${hairDark}"/>
+          <rect x="13" y="20" width="2" height="24" fill="${hairHighlight}"/>
+          <rect x="49" y="20" width="2" height="24" fill="${hairHighlight}"/>
+          <rect x="21" y="11" width="10" height="2" fill="${hairHighlight}"/>
+        `;
+      } else if (config.hair === 'afro') {
+        hairSvg = `
+          <rect x="18" y="4" width="28" height="3" fill="${hairDark}"/>
+          <rect x="13" y="7" width="38" height="4" fill="${hairMain}"/>
+          <rect x="10" y="11" width="44" height="9" fill="${hairMain}"/>
+          <rect x="10" y="20" width="6" height="10" fill="${hairMain}"/>
+          <rect x="48" y="20" width="6" height="10" fill="${hairMain}"/>
+          <rect x="16" y="8" width="4" height="3" fill="${hairHighlight}"/>
+          <rect x="26" y="6" width="5" height="3" fill="${hairHighlight}"/>
+          <rect x="38" y="9" width="4" height="3" fill="${hairHighlight}"/>
+          <rect x="12" y="14" width="3" height="3" fill="${hairHighlight}"/>
+          <rect x="49" y="14" width="3" height="3" fill="${hairHighlight}"/>
+          <rect x="9" y="12" width="1" height="16" fill="${hairDark}"/>
+          <rect x="54" y="12" width="1" height="16" fill="${hairDark}"/>
+        `;
+      } else if (config.hair === 'spikes') {
+        hairSvg = `
+          <rect x="19" y="4" width="3" height="6" fill="${hairMain}"/>
+          <rect x="26" y="2" width="4" height="8" fill="${hairMain}"/>
+          <rect x="34" y="3" width="4" height="7" fill="${hairMain}"/>
+          <rect x="42" y="5" width="3" height="6" fill="${hairMain}"/>
+          <rect x="16" y="10" width="32" height="8" fill="${hairMain}"/>
+          <rect x="14" y="13" width="4" height="10" fill="${hairMain}"/>
+          <rect x="46" y="13" width="4" height="10" fill="${hairMain}"/>
+          <rect x="27" y="4" width="2" height="4" fill="${hairHighlight}"/>
+          <rect x="35" y="5" width="2" height="4" fill="${hairHighlight}"/>
+          <rect x="20" y="11" width="8" height="2" fill="${hairHighlight}"/>
+        `;
+      } else {
+        // Sleek Bob
+        hairSvg = `
+          <rect x="18" y="8" width="28" height="2" fill="${hairDark}"/>
+          <rect x="15" y="10" width="34" height="9" fill="${hairMain}"/>
+          <rect x="12" y="14" width="5" height="24" fill="${hairMain}"/>
+          <rect x="47" y="14" width="5" height="24" fill="${hairMain}"/>
+          <rect x="13" y="36" width="6" height="3" fill="${hairDark}"/>
+          <rect x="45" y="36" width="6" height="3" fill="${hairDark}"/>
+          <rect x="20" y="12" width="11" height="2" fill="${hairHighlight}"/>
+          <rect x="35" y="12" width="8" height="2" fill="${hairHighlight}"/>
+        `;
+      }
+
+      // Background Steam (Degree 3) & Background Flames (Degree 4)
+      let backgroundHeatSvg = '';
+      if (cookDegree === 3) {
+        // Billowing white/light-gray 8-bit steam clouds fuming in the background
+        backgroundHeatSvg = `
+          <g class="steam-bg-puff">
+            <!-- Left Background Steam Plume -->
+            <rect x="2" y="18" width="12" height="14" fill="#E4E4E7"/>
+            <rect x="4" y="12" width="10" height="8" fill="#F4F4F5"/>
+            <rect x="6" y="6" width="8" height="7" fill="#E4E4E7"/>
+            <rect x="1" y="21" width="2" height="9" fill="#A1A1AA"/>
+            <rect x="3" y="14" width="2" height="6" fill="#D4D4D8"/>
+            <rect x="5" y="8" width="2" height="5" fill="#A1A1AA"/>
+            <!-- Right Background Steam Plume -->
+            <rect x="50" y="18" width="12" height="14" fill="#E4E4E7"/>
+            <rect x="50" y="12" width="10" height="8" fill="#F4F4F5"/>
+            <rect x="50" y="6" width="8" height="7" fill="#E4E4E7"/>
+            <rect x="61" y="21" width="2" height="9" fill="#A1A1AA"/>
+            <rect x="59" y="14" width="2" height="6" fill="#D4D4D8"/>
+            <rect x="57" y="8" width="2" height="5" fill="#A1A1AA"/>
+            <!-- Top Center Steam Wisps -->
+            <rect x="22" y="1" width="7" height="6" fill="#F4F4F5"/>
+            <rect x="35" y="2" width="7" height="6" fill="#E4E4E7"/>
+            <rect x="28" y="0" width="8" height="4" fill="#D4D4D8"/>
+          </g>
+        `;
+      } else if (cookDegree === 4) {
+        // Roaring 8-bit Red, Orange & Yellow Flames burning in the background
+        backgroundHeatSvg = `
+          <g class="flame-bg-tongue">
+            <!-- Outer Crimson Flame Base -->
+            <rect x="2" y="22" width="60" height="36" fill="#DC2626"/>
+            <rect x="4" y="14" width="12" height="12" fill="#EF4444"/>
+            <rect x="6" y="8" width="6" height="8" fill="#F97316"/>
+            <rect x="8" y="4" width="3" height="5" fill="#FACC15"/>
+            <rect x="48" y="14" width="12" height="12" fill="#EF4444"/>
+            <rect x="52" y="8" width="6" height="8" fill="#F97316"/>
+            <rect x="53" y="4" width="3" height="5" fill="#FACC15"/>
+            <!-- Upper Crown Flame Tongues -->
+            <rect x="16" y="3" width="6" height="8" fill="#EF4444"/>
+            <rect x="18" y="1" width="3" height="4" fill="#FACC15"/>
+            <rect x="29" y="1" width="6" height="8" fill="#F97316"/>
+            <rect x="31" y="0" width="2" height="4" fill="#FEF08A"/>
+            <rect x="42" y="3" width="6" height="8" fill="#EF4444"/>
+            <rect x="43" y="1" width="3" height="4" fill="#FACC15"/>
+            <!-- Mid-Layer Bright Orange & Yellow Inner Fire -->
+            <rect x="5" y="26" width="54" height="30" fill="#F97316"/>
+            <rect x="8" y="32" width="48" height="24" fill="#FACC15"/>
+            <rect x="10" y="38" width="44" height="18" fill="#FEF08A"/>
+          </g>
+        `;
+      }
+
+      // Burnt Hair Smoke & Glowing Embers for Degree 4
+      let burntHairEffects = '';
+      if (cookDegree === 4) {
+        burntHairEffects = `
+          <rect class="smoke-wisp" x="19" y="0" width="3" height="5" fill="#71717A"/>
+          <rect class="smoke-wisp" x="31" y="1" width="3" height="4" fill="#A1A1AA"/>
+          <rect class="smoke-wisp" x="41" y="0" width="3" height="5" fill="#52525B"/>
+          <rect x="22" y="13" width="2" height="2" fill="#F97316"/>
+          <rect x="38" y="11" width="2" height="2" fill="#EF4444"/>
+          <rect x="29" y="15" width="2" height="1" fill="#FACC15"/>
+        `;
+      }
+
+      return `
+        <svg width="${sizePx}" height="${sizePx}" viewBox="0 0 64 64" class="w-full h-full" shape-rendering="crispEdges">
+          <!-- Background Steam (Degree 3) or Flames (Degree 4) -->
+          ${backgroundHeatSvg}
+
+          <!-- Neck & Shirt Base -->
+          <rect x="25" y="50" width="14" height="7" fill="${skinShade}"/>
+          <rect x="27" y="51" width="10" height="5" fill="${skinBase}"/>
+          ${genderAccentsSvg}
+
+          <!-- Ears & Face Shape -->
+          ${earsSvg}
+          ${faceSvg}
+
+          <!-- Detailed Nose Bridge & Nostril Shadow -->
+          <rect x="31" y="31" width="2" height="5" fill="${skinHighlight}"/>
+          <rect x="30" y="35" width="4" height="2" fill="${skinShade}"/>
+
+          <!-- Eyes, Eyebrows & Facial Expression -->
+          ${eyesDetailSvg}
+          ${browsSvg}
+          ${expressionSvg}
+
+          <!-- Hair & Degree 4 Burn Smoke -->
+          ${hairSvg}
+          ${burntHairEffects}
+        </svg>
+      `;
+    }
+
+    function initAvatarCreator() {
+      const renderOptionGroup = (containerId, items, stateKey, renderChipContent) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = items.map((item) => {
+          const isActive = playerAvatar[stateKey] === item.id;
+          return `
+            <button type="button" data-val="${item.id}" class="avatar-choice-btn py-2 px-2 text-center font-bold text-[11px] text-black flex flex-col items-center justify-center gap-1 ${isActive ? 'active' : ''}">
+              ${renderChipContent(item)}
+            </button>
+          `;
+        }).join('');
+
+        container.querySelectorAll('button[data-val]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            playerAvatar[stateKey] = btn.getAttribute('data-val');
+            playNeutralSound();
+            refreshAvatarCreatorUI();
+          });
+        });
+      };
+
+      renderOptionGroup('avatarGenderOptions', AVATAR_GENDERS, 'gender', (item) => `<span>${item.label}</span>`);
+      renderOptionGroup('avatarSkinOptions', AVATAR_SKIN_TONES, 'skin', (item) => `
+        <span class="w-5 h-5 border-2 border-[#111111] inline-block" style="background-color: ${item.base};"></span>
+        <span class="text-[9px] leading-tight">${item.label.split(' ')[0]}</span>
+      `);
+      renderOptionGroup('avatarFaceOptions', AVATAR_FACE_SHAPES, 'face', (item) => `<span class="text-[10px]">${item.label}</span>`);
+      renderOptionGroup('avatarHairOptions', AVATAR_HAIR_STYLES, 'hair', (item) => `<span class="text-[10px]">${item.label}</span>`);
+      renderOptionGroup('avatarEyeOptions', AVATAR_EYE_COLORS, 'eyes', (item) => `
+        <span class="w-4 h-4 border-2 border-[#111111] inline-block" style="background-color: ${item.hex};"></span>
+        <span class="text-[9px]">${item.label}</span>
+      `);
+
+      // Update Live Preview Portrait & Summary Tag
+      const previewBox = document.getElementById('avatarCreatorPreviewBox');
+      if (previewBox) {
+        previewBox.innerHTML = renderPlayerAvatarSVG(playerAvatar, 1, 156);
+      }
+
+      const gLabel = AVATAR_GENDERS.find((g) => g.id === playerAvatar.gender)?.label || '';
+      const fLabel = AVATAR_FACE_SHAPES.find((f) => f.id === playerAvatar.face)?.label || '';
+      const hLabel = AVATAR_HAIR_STYLES.find((h) => h.id === playerAvatar.hair)?.label || '';
+      const summaryEl = document.getElementById('avatarSummaryTag');
+      if (summaryEl) {
+        summaryEl.textContent = `${gLabel} · ${fLabel} · ${hLabel}`;
+      }
+    }
+
+    function refreshAvatarCreatorUI() {
+      initAvatarCreator();
+      updateSideQuizAvatar();
+    }
+
+    function randomizePlayerAvatar() {
+      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)].id;
+      playerAvatar = {
+        gender: pick(AVATAR_GENDERS),
+        skin: pick(AVATAR_SKIN_TONES),
+        face: pick(AVATAR_FACE_SHAPES),
+        hair: pick(AVATAR_HAIR_STYLES),
+        eyes: pick(AVATAR_EYE_COLORS)
+      };
+      playCoinSound();
+      refreshAvatarCreatorUI();
+    }
+
+    function updateSideQuizAvatar() {
+      const activeQs = getActiveQuestions();
+      const answeredQs = activeQs.filter((q) => userAnswers[q.id] !== undefined);
+      let livePct = 0;
+      if (answeredQs.length > 0) {
+        const sum = answeredQs.reduce((acc, q) => acc + (userAnswers[q.id] || 1), 0);
+        livePct = normalizePercent(sum, answeredQs.length);
+      }
+      const degree = getCookDegreeFromPercent(livePct);
+
+      const frame = document.getElementById('quizSideAvatarFrame');
+      const badge = document.getElementById('quizLiveCookBadge');
+      const heatEl = document.getElementById('quizLiveHeatPercent');
+      const nameLabel = document.getElementById('quizPlayerNameLabel');
+
+      // 2x Scaled Side Avatar (148px inside 160px frame)
+      if (frame) frame.innerHTML = renderPlayerAvatarSVG(playerAvatar, degree, 148);
+      if (badge) badge.textContent = COOK_DEGREE_LABELS[degree];
+      if (heatEl) heatEl.textContent = `${livePct}%`;
+      if (nameLabel) nameLabel.textContent = getSanitizedPlayerName();
+    }
+
+    // =========================================================================
+    // 5C. MARK ZUCKERBERG PROGRESS-BAR MOVEMENT & 5 CASH FINALE REACTIONS
+    // =========================================================================
+    const HAPPY_QUIPS = [
+      'Yummy data !',
+      'I feed on your brainrot ahah !'
+    ];
+
+    const SAD_QUIPS = [
+      'Give me one more scroll ! Please…',
+      'No engagement ?',
+      'Lame…',
+      'Awkward.'
+    ];
+
+    const NEUTRAL_QUIPS = [
+      "HI! I'M MARK ZUCKERBERG!",
+      'STEPPING TOWARD MY CASH!',
+      'KEEP SCROLLING...'
+    ];
+
+    function updateZuckProgressPosition(stepAnimate = false) {
+      const walkerEl = document.getElementById('zuckWalker');
+      const flipEl = document.getElementById('zuckSpriteFlip');
+      const legsA = document.getElementById('zuckLegsFrameA');
+      const legsB = document.getElementById('zuckLegsFrameB');
+      if (!walkerEl || !flipEl) return;
+
+      // Always face right toward his pile of cash
+      flipEl.style.transform = 'scaleX(1)';
+
+      const activeQs = getActiveQuestions();
+      const answeredCount = activeQs.filter((q) => userAnswers[q.id] !== undefined).length;
+      const ratio = currentView === 'results'
+        ? 1
+        : Math.min(activeQs.length, answeredCount) / activeQs.length;
+
+      // Start on left side (16px) and end right on his pile of cash on the right side
+      const startX = 16;
+      const cashPileTargetX = Math.max(120, window.innerWidth - 195);
+      const targetX = Math.round(startX + ratio * (cashPileTargetX - startX));
+
+      walkerEl.style.left = `${targetX}px`;
+
+      // Animate a physical walking stride when taking a step forward
+      if (stepAnimate && legsA && legsB) {
+        zuckWalkFrame = zuckWalkFrame === 0 ? 1 : 0;
+        if (zuckWalkFrame === 0) {
+          legsA.classList.remove('hidden');
+          legsB.classList.add('hidden');
+        } else {
+          legsA.classList.add('hidden');
+          legsB.classList.remove('hidden');
+        }
+        setTimeout(() => {
+          legsA.classList.remove('hidden');
+          legsB.classList.add('hidden');
+        }, 320);
+      }
+    }
+
+    function resetZuckFinaleProps() {
+      zuckFinaleActive = false;
+      const charEl = document.getElementById('zuckCharacter');
+      const faceNeutral = document.getElementById('zuckFaceNeutral');
+      const faceHappy = document.getElementById('zuckFaceHappy');
+      const faceSad = document.getElementById('zuckFaceSad');
+      const faceBored = document.getElementById('zuckFaceBored');
+      const lizardTail = document.getElementById('zuckLizardTail');
+      const goldChain = document.getElementById('zuckGoldChain');
+      const moneySpread = document.getElementById('zuckMoneySpread');
+      const redCar = document.getElementById('zuckRedCar');
+      const musicNotes = document.getElementById('zuckMusicNotes');
+      const armyOverlay = document.getElementById('lizardArmyOverlay');
+
+      if (charEl) {
+        charEl.classList.remove('state-happy', 'state-sad', 'zuck-happy', 'zuck-super-happy', 'zuck-sad', 'zuck-dancing');
+        charEl.classList.add('state-neutral');
+      }
+      if (faceNeutral) faceNeutral.classList.remove('hidden');
+      if (faceHappy) faceHappy.classList.add('hidden');
+      if (faceSad) faceSad.classList.add('hidden');
+      if (faceBored) faceBored.classList.add('hidden');
+      if (lizardTail) lizardTail.classList.add('hidden');
+      if (goldChain) goldChain.classList.add('hidden');
+      if (moneySpread) moneySpread.classList.add('hidden');
+      if (redCar) redCar.classList.add('hidden');
+      if (musicNotes) musicNotes.classList.add('hidden');
+      if (armyOverlay) {
+        armyOverlay.classList.add('hidden');
+        armyOverlay.innerHTML = '';
+      }
+    }
+
+    function spawnLizardsArmyInvasion() {
+      const overlay = document.getElementById('lizardArmyOverlay');
+      if (!overlay) return;
+
+      overlay.classList.remove('hidden');
+      const lizardCount = 14;
+      let html = '';
+
+      for (let i = 0; i < lizardCount; i++) {
+        const duration = (4.2 + (i % 5) * 0.85).toFixed(2);
+        const delay = (-i * 0.45).toFixed(2);
+        const bottomOffset = i % 3 === 0 ? 36 : (i % 3 === 1 ? 52 : 76);
+        const scale = i % 2 === 0 ? 1 : 0.82;
+        const chattering = i % 4 === 0 ? 'SSSS!' : (i % 4 === 1 ? 'DATA!' : '');
+
+        html += `
+          <div class="lizard-army-runner flex flex-col items-center" style="bottom: ${bottomOffset}px; animation-duration: ${duration}s; animation-delay: ${delay}s; transform: scale(${scale});">
+            ${chattering ? `<span class="px-1.5 py-0.5 mb-0.5 bg-mario-yellow border-2 border-[#111111] font-pixel-title text-[7px] text-black">${chattering}</span>` : ''}
+            <svg class="lizard-army-sprite" width="54" height="30" viewBox="0 0 27 15" shape-rendering="crispEdges">
+              <!-- Lizard Tail -->
+              <rect x="0" y="7" width="5" height="3" fill="#16A34A"/>
+              <rect x="0" y="5" width="2" height="3" fill="#22C55E"/>
+              <!-- Lizard Body & Dorsal Spikes -->
+              <rect x="5" y="6" width="12" height="5" fill="#22C55E"/>
+              <rect x="7" y="4" width="2" height="2" fill="#FCE844"/>
+              <rect x="11" y="4" width="2" height="2" fill="#FCE844"/>
+              <rect x="15" y="4" width="2" height="2" fill="#FCE844"/>
+              <!-- Lizard Head & Yellow Slit Eye -->
+              <rect x="17" y="4" width="8" height="6" fill="#4ADE80"/>
+              <rect x="20" y="5" width="3" height="3" fill="#FCE844"/>
+              <rect x="21" y="5" width="1" height="3" fill="#111111"/>
+              <!-- Flicking Red Forked Tongue -->
+              <rect x="25" y="8" width="2" height="1" fill="#E52521"/>
+              <!-- Pixel Legs -->
+              <rect x="6" y="11" width="3" height="4" fill="#15803D"/>
+              <rect x="14" y="11" width="3" height="4" fill="#15803D"/>
+            </svg>
+          </div>
+        `;
+      }
+
+      overlay.innerHTML = html;
+    }
+
+    function triggerZuckFinalCashReaction(positiveCount) {
+      if (zuckReactionTimer) clearTimeout(zuckReactionTimer);
+      if (zuckLizardTimer) clearTimeout(zuckLizardTimer);
+      resetZuckFinaleProps();
+      zuckFinaleActive = true;
+
+      const charEl = document.getElementById('zuckCharacter');
+      const faceNeutral = document.getElementById('zuckFaceNeutral');
+      const faceHappy = document.getElementById('zuckFaceHappy');
+      const faceSad = document.getElementById('zuckFaceSad');
+      const faceBored = document.getElementById('zuckFaceBored');
+      const lizardTail = document.getElementById('zuckLizardTail');
+      const goldChain = document.getElementById('zuckGoldChain');
+      const moneySpread = document.getElementById('zuckMoneySpread');
+      const redCar = document.getElementById('zuckRedCar');
+      const musicNotes = document.getElementById('zuckMusicNotes');
+
+      const totalCash = positiveCount * 100;
+      const totalQuestions = getActiveQuestions().length;
+      const positiveRatio = totalQuestions > 0 ? positiveCount / totalQuestions : 0;
+      faceNeutral.classList.add('hidden');
+
+      if (positiveRatio <= 0.12) {
+        // 1. Low amount: starts crying
+        faceSad.classList.remove('hidden');
+        charEl.classList.add('state-sad', 'zuck-sad');
+        setZuckSpeech(`WAAAH! ONLY $${totalCash}?! SO BROKE...`);
+        playSadSound();
+      } else if (positiveRatio <= 0.34) {
+        // 2. Few bills: gets bored and rolls his eyes around
+        faceBored.classList.remove('hidden');
+        setZuckSpeech(`UGH... ONLY ${positiveCount} BILLS. SO BORING...`);
+        playNeutralSound();
+      } else if (positiveRatio <= 0.59) {
+        // 3. Medium amount: starts dancing
+        faceHappy.classList.remove('hidden');
+        musicNotes.classList.remove('hidden');
+        charEl.classList.add('state-happy', 'zuck-dancing');
+        setZuckSpeech(`$${totalCash}! NICE DATA! TIME TO DANCE!`);
+        playStartFanfare();
+      } else if (positiveRatio <= 0.83) {
+        // 4. High amount: money spread, big dollar chain & brand new red flashy car
+        faceHappy.classList.remove('hidden');
+        goldChain.classList.remove('hidden');
+        moneySpread.classList.remove('hidden');
+        redCar.classList.remove('hidden');
+        charEl.classList.add('state-happy', 'zuck-happy');
+        setZuckSpeech(`$${totalCash}! MONEY SPREAD & NEW RED CAR!`);
+        spawnFlyingDollarBill();
+        playStartFanfare();
+      } else {
+        // 5. Extreme amount: invades the screen with his lizards army & gets super happy
+        faceHappy.classList.remove('hidden');
+        lizardTail.classList.remove('hidden');
+        goldChain.classList.remove('hidden');
+        charEl.classList.add('state-happy', 'zuck-super-happy');
+        setZuckSpeech(`$${totalCash}! LIZARD ARMY INVASION!!`);
+        spawnFlyingDollarBill();
+        spawnLizardsArmyInvasion();
+        playStartFanfare();
+      }
+    }
+
+    function setZuckSpeech(text) {
+      const speechText = document.getElementById('zuckSpeechText');
+      if (speechText) speechText.textContent = text;
+    }
+
+    function updateZuckerbergCompanion(reactionType = 'neutral', spawnDollar = false, customSpeech = null) {
+      if (zuckFinaleActive) return;
+
+      const charEl = document.getElementById('zuckCharacter');
+      const faceNeutral = document.getElementById('zuckFaceNeutral');
+      const faceHappy = document.getElementById('zuckFaceHappy');
+      const faceSad = document.getElementById('zuckFaceSad');
+      const faceBored = document.getElementById('zuckFaceBored');
+      const lizardTail = document.getElementById('zuckLizardTail');
+
+      if (zuckReactionTimer) clearTimeout(zuckReactionTimer);
+      if (zuckLizardTimer) clearTimeout(zuckLizardTimer);
+
+      // Reset expression visibility & animation classes
+      faceNeutral.classList.add('hidden');
+      faceHappy.classList.add('hidden');
+      faceSad.classList.add('hidden');
+      if (faceBored) faceBored.classList.add('hidden');
+      if (lizardTail) lizardTail.classList.add('hidden');
+      charEl.classList.remove('state-neutral', 'state-happy', 'state-sad', 'zuck-happy', 'zuck-sad');
+      void charEl.offsetWidth; // Reflow to retrigger jump animation
+
+      if (reactionType === 'happy') {
+        // Lizard tail & yellow eyes active for 2 seconds
+        faceHappy.classList.remove('hidden');
+        if (lizardTail) lizardTail.classList.remove('hidden');
+        charEl.classList.add('state-happy', 'zuck-happy');
+
+        const chosenHappy = customSpeech || HAPPY_QUIPS[Math.floor(Math.random() * HAPPY_QUIPS.length)];
+        setZuckSpeech(chosenHappy);
+
+        if (spawnDollar) {
+          spawnFlyingDollarBill();
+        }
+
+        zuckLizardTimer = setTimeout(() => {
+          if (zuckFinaleActive) return;
+          if (lizardTail) lizardTail.classList.add('hidden');
+          faceHappy.classList.add('hidden');
+          faceNeutral.classList.remove('hidden');
+          charEl.classList.remove('state-happy', 'zuck-happy');
+        }, 2000);
+      } else if (reactionType === 'sad') {
+        faceSad.classList.remove('hidden');
+        charEl.classList.add('state-sad', 'zuck-sad');
+
+        const chosenSad = customSpeech || SAD_QUIPS[Math.floor(Math.random() * SAD_QUIPS.length)];
+        setZuckSpeech(chosenSad);
+
+        zuckReactionTimer = setTimeout(() => {
+          if (zuckFinaleActive) return;
+          faceSad.classList.add('hidden');
+          faceNeutral.classList.remove('hidden');
+          charEl.classList.remove('state-sad', 'zuck-sad');
+        }, 2000);
+      } else {
+        faceNeutral.classList.remove('hidden');
+        charEl.classList.add('state-neutral');
+        setZuckSpeech(customSpeech || NEUTRAL_QUIPS[Math.floor(Math.random() * NEUTRAL_QUIPS.length)]);
+      }
+
+      syncDollarStackDisplay();
+    }
+
+    function spawnFlyingDollarBill() {
+      const emitter = document.getElementById('dollarBillEmitter');
+      if (!emitter) return;
+
+      const billEl = document.createElement('div');
+      billEl.className = 'flying-dollar-bill flex flex-col items-center';
+      billEl.innerHTML = `
+        <span class="font-pixel-title text-[9px] text-mario-yellow mb-0.5" style="text-shadow: 2px 2px 0 #111111;">+$100</span>
+        <svg width="42" height="22" viewBox="0 0 21 11" shape-rendering="crispEdges" class="drop-shadow-[2px_2px_0_#111111]">
+          <rect x="0" y="0" width="21" height="11" fill="#111111"/>
+          <rect x="1" y="1" width="19" height="9" fill="#22C55E"/>
+          <rect x="2" y="2" width="17" height="7" fill="#4ADE80"/>
+          <rect x="8" y="3" width="5" height="5" fill="#15803D"/>
+          <rect x="10" y="2" width="1" height="7" fill="#FCE844"/>
+          <rect x="9" y="4" width="3" height="1" fill="#FCE844"/>
+          <rect x="9" y="6" width="3" height="1" fill="#FCE844"/>
+        </svg>
+      `;
+
+      emitter.appendChild(billEl);
+      setTimeout(() => {
+        if (billEl.parentNode) {
+          billEl.parentNode.removeChild(billEl);
+        }
+      }, 960);
+    }
+
+    function syncDollarStackDisplay() {
+      const activeQs = getActiveQuestions();
+      const positiveCount = activeQs.filter((q) => (userAnswers[q.id] || 0) >= 4).length;
+      const totalCash = positiveCount * 100;
+
+      // Update HUD Cash & Companion Stack Cash Counter
+      const hudCash = document.getElementById('hudCashText');
+      const stackCash = document.getElementById('zuckCashCounter');
+      if (hudCash) hudCash.textContent = `$${totalCash.toLocaleString()}`;
+      if (stackCash) stackCash.textContent = `$${totalCash.toLocaleString()}`;
+
+      // Render physical 2D dollar bill slabs in up to 2 balanced columns
+      const pilesContainer = document.getElementById('dollarStackPiles');
+      if (!pilesContainer) return;
+
+      if (positiveCount === 0) {
+        pilesContainer.innerHTML = `<div class="text-[8px] font-pixel-title text-black/60 pb-1">EMPTY</div>`;
+        return;
+      }
+
+      const maxPerCol = Math.ceil(activeQs.length / 2);
+      const col1Count = Math.min(positiveCount, maxPerCol);
+      const col2Count = Math.max(0, positiveCount - maxPerCol);
+
+      let html = `<div class="flex flex-col-reverse items-center">`;
+      for (let i = 0; i < col1Count; i++) {
+        html += `<div class="dollar-bill-slab"></div>`;
+      }
+      html += `</div>`;
+
+      if (col2Count > 0) {
+        html += `<div class="flex flex-col-reverse items-center">`;
+        for (let i = 0; i < col2Count; i++) {
+          html += `<div class="dollar-bill-slab"></div>`;
+        }
+        html += `</div>`;
+      }
+
+      pilesContainer.innerHTML = html;
+    }
+
+    // =========================================================================
+    // 6. FIREBASE AUTH & REAL-TIME COHORT LISTENER (RULES 1, 2, 3)
+    // =========================================================================
+    async function initFirebase() {
+      try {
+        if (typeof __firebase_config === 'undefined' || !__firebase_config) {
+          updateCohortCountersUI(false);
+          return;
+        }
+
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+
+        // RULE 3: Authenticate FIRST before any Firestore queries
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+
+        onAuthStateChanged(auth, (user) => {
+          currentUser = user;
+          if (user) {
+            subscribeToResponses();
+          }
+        });
+      } catch (err) {
+        console.error('Database initialization warning:', err);
+        updateCohortCountersUI(false);
+      }
+    }
+
+    function subscribeToResponses() {
+      if (!currentUser || !db) return;
+
+      // RULE 1: Strict Path `/artifacts/{appId}/public/data/responses`
+      // RULE 2: Simple collection() query without orderBy/where/limit
+      const responsesRef = collection(db, 'artifacts', appId, 'public', 'data', 'responses');
+
+      onSnapshot(
+        responsesRef,
+        (snapshot) => {
+          const docs = [];
+          snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            if (data && typeof data.overallPercent === 'number') {
+              docs.push({ id: docSnap.id, ...data });
+            }
+          });
+          liveCohortResponses = docs;
+          updateCohortCountersUI(true);
+
+          // If user is currently viewing the results page, update live comparison charts immediately
+          if (currentView === 'results' && lastSubmittedResult) {
+            renderResultsDashboard(lastSubmittedResult);
+          }
+        },
+        (error) => {
+          console.error('Error listening to live responses:', error);
+          updateCohortCountersUI(false);
+        }
+      );
+    }
+
+    async function saveUserResponseToFirestore(resultObj) {
+      if (!currentUser || !db) {
+        const statusText = document.getElementById('liveSaveStatusText');
+        if (statusText) statusText.textContent = 'Local session mode (offline)';
+        return;
+      }
+
+      try {
+        const responsesRef = collection(db, 'artifacts', appId, 'public', 'data', 'responses');
+        await addDoc(responsesRef, {
+          userId: currentUser.uid,
+          quizMode: quizMode,
+          timestamp: Date.now(),
+          rawTotal: resultObj.rawTotal,
+          maxRaw: resultObj.maxRaw,
+          overallPercent: resultObj.overallPercent,
+          tierTitle: resultObj.tier.title,
+          categoryPercents: resultObj.categoryPercents,
+          subcatFriendshipsPercent: resultObj.subcatFriendshipsPercent,
+          subcatRomanticPercent: resultObj.subcatRomanticPercent
+        });
+
+        const statusText = document.getElementById('liveSaveStatusText');
+        if (statusText) statusText.textContent = 'Saved to live cohort database';
+      } catch (err) {
+        console.error('Error saving response to Firestore:', err);
+      }
+    }
+
+    function updateCohortCountersUI(isConnected) {
+      const dot = document.getElementById('dbStatusDot');
+      const headerCount = document.getElementById('headerRespondentCount');
+      const landingCount = document.getElementById('landingRespondentCount');
+
+      const n = liveCohortResponses.length;
+
+      if (isConnected) {
+        dot.className = 'w-2.5 h-2.5 bg-mario-green-light inline-block';
+        headerCount.textContent = n === 1 ? '1 LIVE' : `${n} LIVE`;
+        landingCount.textContent = n === 0 ? 'Be Player #1!' : (n === 1 ? '1 Player' : `${n} Players`);
+      } else {
+        dot.className = 'w-2.5 h-2.5 bg-mario-yellow inline-block';
+        headerCount.textContent = `${n} LOCAL`;
+        landingCount.textContent = n === 0 ? 'Ready for P1' : `${n} Players`;
+      }
+    }
+
+    // =========================================================================
+    // 7. SCORING & COHORT AGGREGATION ENGINE
+    // =========================================================================
+    function normalizePercent(rawSum, questionCount) {
+      const minPossible = questionCount * 1;
+      const maxPossible = questionCount * 5;
+      return Math.round(((rawSum - minPossible) / (maxPossible - minPossible)) * 100);
+    }
+
+    function computeUserResults() {
+      const activeQs = getActiveQuestions();
+      let rawTotal = 0;
+      const categoryRaw = {};
+      const categoryCounts = {};
+
+      CATEGORIES.forEach((cat) => {
+        categoryRaw[cat.id] = 0;
+        categoryCounts[cat.id] = 0;
+      });
+
+      let friendshipsRaw = 0;
+      let friendshipsCount = 0;
+      let romanticRaw = 0;
+      let romanticCount = 0;
+
+      activeQs.forEach((q) => {
+        const val = userAnswers[q.id] || 1;
+        rawTotal += val;
+        categoryRaw[q.categoryId] += val;
+        categoryCounts[q.categoryId] += 1;
+
+        if (q.subheader === 'A. Friendships') {
+          friendshipsRaw += val;
+          friendshipsCount += 1;
+        } else if (q.subheader === 'B. Romantic relationships') {
+          romanticRaw += val;
+          romanticCount += 1;
+        }
+      });
+
+      const overallPercent = normalizePercent(rawTotal, activeQs.length);
+      const maxRaw = activeQs.length * 5;
+
+      const categoryPercents = {};
+      CATEGORIES.forEach((cat) => {
+        categoryPercents[cat.id] = normalizePercent(categoryRaw[cat.id], categoryCounts[cat.id]);
+      });
+
+      const subcatFriendshipsPercent = normalizePercent(friendshipsRaw, friendshipsCount);
+      const subcatRomanticPercent = normalizePercent(romanticRaw, romanticCount);
+
+      const tier = COOKNESS_TIERS.find((t) => overallPercent >= t.min && overallPercent <= t.max) || COOKNESS_TIERS[2];
+
+      return {
+        rawTotal,
+        maxRaw,
+        overallPercent,
+        categoryRaw,
+        categoryCounts,
+        categoryPercents,
+        subcatFriendshipsPercent,
+        subcatRomanticPercent,
+        tier
+      };
+    }
+
+    function computeCohortStats() {
+      // Combine live Firestore responses; if the newly submitted response hasn't echoed back yet, include it once
+      const pool = liveCohortResponses.length > 0
+        ? liveCohortResponses
+        : (lastSubmittedResult ? [{
+            overallPercent: lastSubmittedResult.overallPercent,
+            categoryPercents: lastSubmittedResult.categoryPercents,
+            subcatFriendshipsPercent: lastSubmittedResult.subcatFriendshipsPercent,
+            subcatRomanticPercent: lastSubmittedResult.subcatRomanticPercent
+          }] : []);
+
+      const n = pool.length;
+      if (n === 0) {
+        return { n: 0, avgOverall: 0, avgCategories: {}, avgFriendships: 0, avgRomantic: 0 };
+      }
+
+      let sumOverall = 0;
+      let sumFriendships = 0;
+      let sumRomantic = 0;
+      const sumCategories = {};
+      CATEGORIES.forEach((c) => { sumCategories[c.id] = 0; });
+
+      pool.forEach((entry) => {
+        sumOverall += Number(entry.overallPercent || 0);
+        sumFriendships += Number(entry.subcatFriendshipsPercent || 0);
+        sumRomantic += Number(entry.subcatRomanticPercent || 0);
+        CATEGORIES.forEach((c) => {
+          const val = entry.categoryPercents && typeof entry.categoryPercents[c.id] === 'number'
+            ? entry.categoryPercents[c.id]
+            : 0;
+          sumCategories[c.id] += val;
+        });
+      });
+
+      const avgCategories = {};
+      CATEGORIES.forEach((c) => {
+        avgCategories[c.id] = Math.round(sumCategories[c.id] / n);
+      });
+
+      return {
+        n,
+        avgOverall: Math.round(sumOverall / n),
+        avgCategories,
+        avgFriendships: Math.round(sumFriendships / n),
+        avgRomantic: Math.round(sumRomantic / n),
+        pool
+      };
+    }
+
+    // =========================================================================
+    // 8. QUIZ NAVIGATION & UI RENDERING
+    // =========================================================================
+    function renderLandingCategories() {
+      const container = document.getElementById('landingCategoriesList');
+      container.innerHTML = CATEGORIES.map((cat) => `
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-bold border-2 border-[#111111] bg-white text-black shadow-[2px_2px_0_#111111]">
+          <span class="text-mario-red">${cat.icon}</span>
+          <span>1-${cat.index}: ${cat.name}</span>
+        </div>
+      `).join('');
+    }
+
+    function switchView(viewName) {
+      currentView = viewName;
+      document.getElementById('landingView').classList.toggle('hidden', viewName !== 'landing');
+      document.getElementById('avatarView').classList.toggle('hidden', viewName !== 'avatar');
+      document.getElementById('quizView').classList.toggle('hidden', viewName !== 'quiz');
+      document.getElementById('resultsView').classList.toggle('hidden', viewName !== 'results');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openAvatarCreator() {
+      playStartFanfare();
+      resetZuckFinaleProps();
+      updateZuckProgressPosition(false);
+      refreshAvatarCreatorUI();
+      const displayName = getSanitizedPlayerName();
+      updateZuckerbergCompanion('neutral', false, `HI ${displayName}! PICK YOUR LOOK!`);
+      switchView('avatar');
+    }
+
+    function startQuiz() {
+      playStartFanfare();
+      resetZuckFinaleProps();
+      currentQuestionIndex = 0;
+      updateZuckProgressPosition(false);
+      updateSideQuizAvatar();
+      const displayName = getSanitizedPlayerName();
+      updateZuckerbergCompanion('neutral', false, `OK ${displayName}, FEED ME YOUR DATA!`);
+      switchView('quiz');
+      renderCurrentQuestion();
+    }
+
+    function renderSegmentedProgressBar(activeCatId) {
+      const bar = document.getElementById('segmentedProgressBar');
+      const activeQs = getActiveQuestions();
+      bar.innerHTML = CATEGORIES.map((cat) => {
+        const catQuestions = activeQs.filter((q) => q.categoryId === cat.id);
+        const answeredInCat = catQuestions.filter((q) => userAnswers[q.id] !== undefined).length;
+        const pct = catQuestions.length > 0 ? Math.round((answeredInCat / catQuestions.length) * 100) : 0;
+        const isCurrent = cat.id === activeCatId;
+
+        return `
+          <div class="h-3 bg-white border-2 border-[#111111] overflow-hidden relative ${isCurrent ? 'ring-2 ring-mario-red' : ''}" title="${cat.name}">
+            <div class="h-full bg-mario-green transition-all duration-300" style="width: ${pct}%"></div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderCurrentQuestion() {
+      const activeQs = getActiveQuestions();
+      const q = activeQs[currentQuestionIndex];
+      const category = CATEGORIES.find((c) => c.id === q.categoryId);
+      const total = activeQs.length;
+      const pct = Math.round(((currentQuestionIndex + 1) / total) * 100);
+
+      // Update Top Counters & HUD World
+      document.getElementById('progressCounterText').textContent = `Q ${currentQuestionIndex + 1}/${total}`;
+      document.getElementById('progressPercentText').textContent = `${pct}%`;
+      document.getElementById('categoryStepLabel').textContent = `WORLD 1-${category.index}`;
+      document.getElementById('hudWorldText').textContent = `WORLD 1-${category.index}`;
+      const totalItemsEl = document.getElementById('quizTotalItemsText');
+      if (totalItemsEl) totalItemsEl.textContent = `${total} ITEMS TOTAL`;
+
+      renderSegmentedProgressBar(category.id);
+
+      // Retrigger subtle card transition
+      const card = document.getElementById('questionCard');
+      card.classList.remove('question-transition');
+      void card.offsetWidth;
+      card.classList.add('question-transition');
+
+      // Update Category & Subheader Badges
+      document.getElementById('activeCategoryIcon').innerHTML = category.icon;
+      document.getElementById('activeCategoryName').textContent = `${category.index}. ${category.name}`;
+
+      const subheaderBadge = document.getElementById('activeSubheaderBadge');
+      if (q.subheader) {
+        subheaderBadge.classList.remove('hidden');
+        subheaderBadge.classList.add('inline-flex');
+        document.getElementById('activeSubheaderText').textContent = q.subheader;
+      } else {
+        subheaderBadge.classList.add('hidden');
+        subheaderBadge.classList.remove('inline-flex');
+      }
+
+      // Question Number & Text
+      const paddedNum = String(currentQuestionIndex + 1).padStart(2, '0');
+      document.getElementById('questionNumberLabel').textContent = `STAGE ${paddedNum} / ${total}`;
+      document.getElementById('questionText').textContent = q.text;
+
+      // Render 5 Scale Buttons
+      const selectedScore = userAnswers[q.id];
+      const optionsContainer = document.getElementById('optionsContainer');
+
+      optionsContainer.innerHTML = SCALE_OPTIONS.map((opt) => {
+        const isSelected = selectedScore === opt.score;
+        return `
+          <button
+            type="button"
+            data-score="${opt.score}"
+            class="option-btn w-full py-2.5 px-3.5 flex items-center justify-between text-left group focus:outline-none ${isSelected ? 'selected' : ''}"
+          >
+            <div class="flex items-center gap-3">
+              <span class="option-key w-7 h-7 font-pixel-title text-[10px] font-bold flex items-center justify-center shrink-0">
+                ${opt.score}
+              </span>
+              <span class="text-sm font-bold text-black">${opt.label}</span>
+            </div>
+            <div class="w-5 h-5 border-2 border-[#111111] ${isSelected ? 'bg-mario-yellow text-black' : 'bg-white'} flex items-center justify-center font-pixel-title text-[10px]">
+              ${isSelected ? '★' : ''}
+            </div>
+          </button>
+        `;
+      }).join('');
+
+      // Attach click handlers to options
+      optionsContainer.querySelectorAll('button[data-score]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const score = Number(btn.getAttribute('data-score'));
+          handleSelectAnswer(score);
+        });
+      });
+
+      // Update Prev / Next Buttons
+      const prevBtn = document.getElementById('prevQuestionBtn');
+      const nextBtn = document.getElementById('nextQuestionBtn');
+      const nextBtnText = document.getElementById('nextBtnText');
+
+      prevBtn.disabled = currentQuestionIndex === 0;
+      const hasCurrentAnswer = userAnswers[q.id] !== undefined;
+      nextBtn.disabled = !hasCurrentAnswer;
+
+      if (currentQuestionIndex === activeQs.length - 1) {
+        nextBtnText.textContent = 'FINISH ★';
+      } else {
+        nextBtnText.textContent = 'NEXT ▶';
+      }
+    }
+
+    function handleSelectAnswer(score) {
+      if (autoAdvanceTimeout) {
+        clearTimeout(autoAdvanceTimeout);
+      }
+
+      const activeQs = getActiveQuestions();
+      const q = activeQs[currentQuestionIndex];
+      userAnswers[q.id] = score;
+
+      // Advance Mark Zuckerberg 1 step forward along the floor toward his pile of cash
+      updateZuckProgressPosition(true);
+
+      // Trigger Mark Zuckerberg Emotional Reaction, 2D Dollar Bill Pop-Up & 8-Bit Sound
+      if (score >= 4) {
+        playCoinSound();
+        updateZuckerbergCompanion('happy', true);
+      } else if (score <= 2) {
+        playSadSound();
+        updateZuckerbergCompanion('sad', false);
+      } else {
+        playNeutralSound();
+        updateZuckerbergCompanion('neutral', false);
+      }
+
+      // Highlight selected option immediately & update side avatar cook level
+      updateSideQuizAvatar();
+      renderCurrentQuestion();
+
+      // Advance smoothly after 260ms so the user enjoys Zuck's reaction & dollar pop-up
+      autoAdvanceTimeout = setTimeout(() => {
+        if (currentQuestionIndex < activeQs.length - 1) {
+          currentQuestionIndex += 1;
+          renderCurrentQuestion();
+        } else {
+          completeAssessment();
+        }
+      }, 260);
+    }
+
+    async function completeAssessment() {
+      const results = computeUserResults();
+      lastSubmittedResult = results;
+      document.getElementById('hudWorldText').textContent = 'VICTORY!';
+      switchView('results');
+
+      // Land Zuck right on his pile of cash at the end of the final question and trigger his cash-tier finale
+      const positiveCount = getActiveQuestions().filter((q) => (userAnswers[q.id] || 0) >= 4).length;
+      syncDollarStackDisplay();
+      updateZuckProgressPosition(true);
+      triggerZuckFinalCashReaction(positiveCount);
+
+      renderResultsDashboard(results);
+      await saveUserResponseToFirestore(results);
+    }
+
+    // =========================================================================
+    // 9. RESULTS DASHBOARD, SVG RADAR CHART & SOCIOLOGY CARDS
+    // =========================================================================
+    function renderResultsDashboard(userRes) {
+      const cohort = computeCohortStats();
+
+      // Mode Badge in Results Header
+      const resultModeBadge = document.getElementById('resultModeBadge');
+      if (resultModeBadge) {
+        resultModeBadge.textContent = quizMode === 'flash'
+          ? '⚡ FLASH MODE (20 QS)'
+          : '👑 CHAD MODE (41 QS)';
+      }
+
+      // 1. Hero Metrics & Final Cooked Avatar (5 Degrees)
+      const finalDegree = getCookDegreeFromPercent(userRes.overallPercent);
+      const resultAvatarFrame = document.getElementById('resultCookedAvatarFrame');
+      const resultDegreeLabel = document.getElementById('resultCookDegreeLabel');
+      const resultPlayerNameTitle = document.getElementById('resultPlayerNameTitle');
+      if (resultAvatarFrame) {
+        resultAvatarFrame.innerHTML = renderPlayerAvatarSVG(playerAvatar, finalDegree, 132);
+      }
+      if (resultDegreeLabel) {
+        resultDegreeLabel.textContent = `DEGREE ${finalDegree} / 5`;
+      }
+      if (resultPlayerNameTitle) {
+        resultPlayerNameTitle.textContent = `${getSanitizedPlayerName()} — RANKING`;
+      }
+
+      document.getElementById('resultOverallPercent').textContent = `${userRes.overallPercent}%`;
+      document.getElementById('resultRawScoreBadge').textContent = `${userRes.rawTotal} / ${userRes.maxRaw} pts`;
+      document.getElementById('resultOverallBar').style.width = `${userRes.overallPercent}%`;
+      document.getElementById('resultTierTitle').textContent = userRes.tier.title;
+      document.getElementById('resultTierDescription').textContent = userRes.tier.description;
+
+      // Cohort Summary Boxes
+      document.getElementById('resultTotalRespondents').textContent = `${cohort.n}`;
+      document.getElementById('comparisonNLabel').textContent = cohort.n === 1 ? 'N = 1 respondent' : `N = ${cohort.n} respondents`;
+
+      if (cohort.n <= 1) {
+        document.getElementById('resultCohortAvg').textContent = `${userRes.overallPercent}%`;
+        document.getElementById('resultCohortDelta').textContent = 'Baseline established';
+        document.getElementById('resultPercentileValue').textContent = '1st Entry';
+        document.getElementById('resultPercentileSubtext').textContent = 'You are the first respondent in the live database; future respondents will be compared against your baseline';
+      } else {
+        document.getElementById('resultCohortAvg').textContent = `${cohort.avgOverall}%`;
+        const diff = userRes.overallPercent - cohort.avgOverall;
+        const sign = diff > 0 ? '+' : '';
+        document.getElementById('resultCohortDelta').textContent = `${sign}${diff}% vs. cohort mean`;
+
+        // Compute percentile rank: percentage of respondents with strictly lower score
+        const lowerCount = cohort.pool.filter((r) => Number(r.overallPercent) < userRes.overallPercent).length;
+        const percentile = Math.round((lowerCount / cohort.n) * 100);
+        document.getElementById('resultPercentileValue').textContent = `Top ${100 - percentile}%`;
+        document.getElementById('resultPercentileSubtext').textContent = `More cooked than ${percentile}% of respondents`;
+      }
+
+      // 2. Render 6-Axis SVG Radar Chart
+      renderRadarChart(userRes, cohort);
+
+      // 3. Render Horizontal Comparison Bars
+      const barsContainer = document.getElementById('comparisonBarsContainer');
+      barsContainer.innerHTML = CATEGORIES.map((cat) => {
+        const userScore = userRes.categoryPercents[cat.id];
+        const avgScore = cohort.n > 0 ? cohort.avgCategories[cat.id] : userScore;
+        const delta = userScore - avgScore;
+        const deltaStr = cohort.n <= 1 ? 'Baseline' : `${delta >= 0 ? '+' : ''}${delta}% vs avg`;
+
+        return `
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-black flex items-center gap-1.5">
+                <span class="text-mario-red">${cat.icon}</span>
+                <span>${cat.name}</span>
+              </span>
+              <div class="flex items-center gap-2">
+                <span class="text-zinc-600 font-bold">${deltaStr}</span>
+                <span class="font-pixel-title text-[10px] text-mario-red w-11 text-right">${userScore}%</span>
+              </div>
+            </div>
+            <!-- 8-Bit Dual Layer Progress Track -->
+            <div class="w-full h-4 bg-zinc-200 border-2 border-[#111111] relative overflow-hidden">
+              <!-- User Solid Mario Red Bar -->
+              <div class="h-full bg-mario-red transition-all duration-500" style="width: ${userScore}%"></div>
+              <!-- Cohort Mean Marker Line -->
+              <div class="absolute top-0 bottom-0 w-1 bg-[#111111]" style="left: ${avgScore}%" title="Live Cohort Average: ${avgScore}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Subcategories A & B inside Category 1
+      document.getElementById('subcatFriendshipsScore').textContent = `${userRes.subcatFriendshipsPercent}%`;
+      document.getElementById('subcatFriendshipsAvg').textContent = `Avg: ${cohort.n > 0 ? cohort.avgFriendships : userRes.subcatFriendshipsPercent}%`;
+      document.getElementById('subcatRomanticScore').textContent = `${userRes.subcatRomanticPercent}%`;
+      document.getElementById('subcatRomanticAvg').textContent = `Avg: ${cohort.n > 0 ? cohort.avgRomantic : userRes.subcatRomanticPercent}%`;
+
+      // 4. Render 6 Category Sociological Breakdown Cards
+      const breakdownGrid = document.getElementById('categoryBreakdownGrid');
+      breakdownGrid.innerHTML = CATEGORIES.map((cat) => {
+        const userScore = userRes.categoryPercents[cat.id];
+        const avgScore = cohort.n > 0 ? cohort.avgCategories[cat.id] : userScore;
+        const delta = userScore - avgScore;
+        const deltaBadge = cohort.n <= 1
+          ? '1st player baseline'
+          : `${delta >= 0 ? '+' : ''}${delta}% vs avg (${avgScore}%)`;
+
+        const subcatHtml = cat.id === 'social' ? `
+          <div class="mt-3 pt-3 border-t-2 border-[#111111] flex items-center justify-between text-xs text-zinc-800 font-bold">
+            <span>A. Friendships: <strong class="text-mario-red">${userRes.subcatFriendshipsPercent}%</strong></span>
+            <span>B. Romantic: <strong class="text-mario-red">${userRes.subcatRomanticPercent}%</strong></span>
+          </div>
+        ` : '';
+
+        return `
+          <div class="pixel-card p-5 sm:p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-10 h-10 bg-mario-yellow border-2 border-[#111111] text-black flex items-center justify-center shrink-0">
+                    ${cat.icon}
+                  </div>
+                  <div>
+                    <div class="font-pixel-title text-[9px] text-mario-pink">WORLD 1-${cat.index}</div>
+                    <h4 class="font-bold text-base text-black mt-0.5">${cat.name}</h4>
+                  </div>
+                </div>
+                <div class="text-right shrink-0">
+                  <div class="font-pixel-title text-lg text-mario-red">${userScore}%</div>
+                  <div class="text-[11px] font-bold text-zinc-600 mt-0.5">${deltaBadge}</div>
+                </div>
+              </div>
+
+              <!-- Mini 8-Bit Progress Bar -->
+              <div class="w-full h-3 bg-zinc-200 border-2 border-[#111111] overflow-hidden mb-4">
+                <div class="h-full bg-mario-green" style="width: ${userScore}%"></div>
+              </div>
+
+              <div class="text-xs font-bold uppercase text-mario-red mb-1">
+                ${cat.conceptTitle}
+              </div>
+              <p class="text-xs sm:text-sm text-zinc-800 leading-relaxed">
+                ${cat.sociologyNote}
+              </p>
+            </div>
+            ${subcatHtml}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderRadarChart(userRes, cohort) {
+      const svg = document.getElementById('radarChartSvg');
+      const cx = 180;
+      const cy = 160;
+      const maxR = 105;
+      const levels = [25, 50, 75, 100];
+
+      const gridColor = '#111111';
+      const labelColor = '#111111';
+      const accentColor = '#E52521';
+      const cohortColor = '#00A800';
+
+      // Helper for polar to cartesian (6 axes starting from top -90 deg)
+      function getPoint(index, pctValue) {
+        const angle = (Math.PI * 2 * index) / 6 - Math.PI / 2;
+        const r = (pctValue / 100) * maxR;
+        return {
+          x: cx + r * Math.cos(angle),
+          y: cy + r * Math.sin(angle)
+        };
+      }
+
+      let svgContent = '';
+
+      // 1. Concentric Hexagonal Grid Polygons
+      levels.forEach((lvl) => {
+        const pts = CATEGORIES.map((_, i) => {
+          const p = getPoint(i, lvl);
+          return `${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+        }).join(' ');
+        svgContent += `<polygon points="${pts}" fill="${lvl === 100 ? '#FCE844' : 'none'}" fill-opacity="0.22" stroke="${gridColor}" stroke-width="1.5" />`;
+      });
+
+      // 2. Axis Spokes & Outer Labels
+      CATEGORIES.forEach((cat, i) => {
+        const outer = getPoint(i, 100);
+        const labelPt = getPoint(i, 126);
+        svgContent += `<line x1="${cx}" y1="${cy}" x2="${outer.x.toFixed(1)}" y2="${outer.y.toFixed(1)}" stroke="${gridColor}" stroke-width="1.5" />`;
+
+        let textAnchor = 'middle';
+        if (labelPt.x < cx - 20) textAnchor = 'end';
+        if (labelPt.x > cx + 20) textAnchor = 'start';
+
+        svgContent += `
+          <text
+            x="${labelPt.x.toFixed(1)}"
+            y="${(labelPt.y + 4).toFixed(1)}"
+            text-anchor="${textAnchor}"
+            fill="${labelColor}"
+            font-size="11"
+            font-weight="700"
+          >${cat.shortName}</text>
+        `;
+      });
+
+      // 3. Cohort Average Polygon (Dashed Green)
+      const cohortPoints = CATEGORIES.map((cat, i) => {
+        const val = cohort.n > 0 ? cohort.avgCategories[cat.id] : userRes.categoryPercents[cat.id];
+        const p = getPoint(i, val);
+        return `${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+      }).join(' ');
+
+      svgContent += `
+        <polygon
+          points="${cohortPoints}"
+          fill="none"
+          stroke="${cohortColor}"
+          stroke-width="2.5"
+          stroke-dasharray="5 3"
+        />
+      `;
+
+      // 4. User Score Polygon (Solid Mario Red with Translucent Fill)
+      const userPoints = CATEGORIES.map((cat, i) => {
+        const val = userRes.categoryPercents[cat.id];
+        const p = getPoint(i, val);
+        return `${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+      }).join(' ');
+
+      svgContent += `
+        <polygon
+          points="${userPoints}"
+          fill="${accentColor}"
+          fill-opacity="0.28"
+          stroke="${accentColor}"
+          stroke-width="3"
+        />
+      `;
+
+      // 5. User Data Square Pixel Vertices
+      CATEGORIES.forEach((cat, i) => {
+        const val = userRes.categoryPercents[cat.id];
+        const p = getPoint(i, val);
+        svgContent += `
+          <rect
+            x="${(p.x - 4).toFixed(1)}"
+            y="${(p.y - 4).toFixed(1)}"
+            width="8"
+            height="8"
+            fill="#FCE844"
+            stroke="#111111"
+            stroke-width="2"
+          />
+        `;
+      });
+
+      svg.innerHTML = svgContent;
+    }
+
+    // =========================================================================
+    // 10. CLIPBOARD SHARE & TOAST NOTIFICATION
+    // =========================================================================
+    function showToast(message) {
+      const banner = document.getElementById('toastBanner');
+      const msgEl = document.getElementById('toastMessage');
+      msgEl.textContent = message;
+      banner.classList.remove('opacity-0', 'translate-y-2');
+      banner.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        banner.classList.add('opacity-0', 'translate-y-2');
+        banner.classList.remove('opacity-100', 'translate-y-0');
+      }, 2800);
+    }
+
+    function copyResultsSummary() {
+      if (!lastSubmittedResult) return;
+      const cohort = computeCohortStats();
+      const modeLabel = quizMode === 'flash' ? 'Flash Version (20 Qs)' : 'Long Version — Chads (41 Qs)';
+      const lines = [
+        `Are You Cooked? — Sciences Po Digital Socialisation Assessment`,
+        `Player: ${getSanitizedPlayerName()} | Mode: ${modeLabel}`,
+        `Overall Cookness Index: ${lastSubmittedResult.overallPercent}% (${lastSubmittedResult.rawTotal}/${lastSubmittedResult.maxRaw} pts)`,
+        `Classification: ${lastSubmittedResult.tier.title}`,
+        `Cohort Comparison (N=${cohort.n}): Cohort Average ${cohort.avgOverall}%`,
+        `---`,
+        ...CATEGORIES.map((c) => `${c.index}. ${c.name}: ${lastSubmittedResult.categoryPercents[c.id]}%`)
+      ];
+      const textToCopy = lines.join('\n');
+
+      const textArea = document.createElement('textarea');
+      textArea.value = textToCopy;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast('Score summary copied to clipboard!');
+      } catch (err) {
+        showToast('Unable to copy automatically');
+      }
+      document.body.removeChild(textArea);
+    }
+
+    // =========================================================================
+    // 11. EVENT LISTENERS & KEYBOARD SHORTCUTS
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      initSoundToggle();
+      initAvatarCreator();
+      renderLandingCategories();
+      initFirebase();
+      setQuizMode('long', false);
+      updateZuckProgressPosition(false);
+      syncDollarStackDisplay();
+      updateSideQuizAvatar();
+      setZuckSpeech("HI! I'M MARK ZUCKERBERG! PICK YOUR MODE & PLAY!");
+
+      document.getElementById('modeFlashBtn').addEventListener('click', () => setQuizMode('flash', true));
+      document.getElementById('modeLongBtn').addEventListener('click', () => setQuizMode('long', true));
+
+      window.addEventListener('resize', () => {
+        updateZuckProgressPosition(false);
+      });
+
+      const landingNameInput = document.getElementById('landingPlayerNameInput');
+      const avatarNameInput = document.getElementById('avatarPlayerNameInput');
+      if (landingNameInput) {
+        landingNameInput.addEventListener('input', (e) => {
+          syncPlayerNameInputs(e.target.value);
+        });
+        landingNameInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            openAvatarCreator();
+          }
+        });
+      }
+      if (avatarNameInput) {
+        avatarNameInput.addEventListener('input', (e) => {
+          syncPlayerNameInputs(e.target.value);
+        });
+      }
+
+      // Start Quiz via PLAY button -> Opens Avatar Creator Page first
+      document.getElementById('startQuizBtn').addEventListener('click', openAvatarCreator);
+
+      // Avatar Creator Buttons
+      document.getElementById('randomizeAvatarBtn').addEventListener('click', randomizePlayerAvatar);
+      document.getElementById('backToLandingBtn').addEventListener('click', () => {
+        resetZuckFinaleProps();
+        updateZuckProgressPosition(false);
+        setZuckSpeech("HI! I'M MARK ZUCKERBERG! PRESS PLAY!");
+        switchView('landing');
+      });
+      document.getElementById('confirmAvatarBtn').addEventListener('click', startQuiz);
+
+      // Brand Home Reset
+      document.getElementById('navBrandBtn').addEventListener('click', () => {
+        userAnswers = {};
+        currentQuestionIndex = 0;
+        resetZuckFinaleProps();
+        syncDollarStackDisplay();
+        updateZuckProgressPosition(false);
+        document.getElementById('hudWorldText').textContent = 'WORLD 1-1';
+        setZuckSpeech("HI! I'M MARK ZUCKERBERG! PRESS PLAY!");
+        switchView('landing');
+      });
+
+      // Previous & Next Question Buttons
+      document.getElementById('prevQuestionBtn').addEventListener('click', () => {
+        if (currentQuestionIndex > 0) {
+          currentQuestionIndex -= 1;
+          renderCurrentQuestion();
+        }
+      });
+
+      document.getElementById('nextQuestionBtn').addEventListener('click', () => {
+        const activeQs = getActiveQuestions();
+        const q = activeQs[currentQuestionIndex];
+        if (userAnswers[q.id] === undefined) return;
+        if (currentQuestionIndex < activeQs.length - 1) {
+          currentQuestionIndex += 1;
+          renderCurrentQuestion();
+        } else {
+          completeAssessment();
+        }
+      });
+
+      // Demo Quick-Fill Button for Project Evaluators
+      document.getElementById('demoQuickFillBtn').addEventListener('click', () => {
+        getActiveQuestions().forEach((q) => {
+          if (userAnswers[q.id] === undefined) {
+            userAnswers[q.id] = Math.floor(Math.random() * 5) + 1;
+          }
+        });
+        syncDollarStackDisplay();
+        updateSideQuizAvatar();
+        completeAssessment();
+      });
+
+      // Retake Quiz Button -> Returns to Avatar Creator so player can keep or tweak avatar
+      document.getElementById('retakeQuizBtn').addEventListener('click', () => {
+        userAnswers = {};
+        currentQuestionIndex = 0;
+        resetZuckFinaleProps();
+        syncDollarStackDisplay();
+        updateZuckProgressPosition(false);
+        openAvatarCreator();
+      });
+
+      // Copy Summary Button
+      document.getElementById('copyResultsBtn').addEventListener('click', copyResultsSummary);
+
+      // Keyboard Support (1-5 to answer, Left/Right arrows to navigate)
+      window.addEventListener('keydown', (e) => {
+        if (currentView !== 'quiz') return;
+        const activeQs = getActiveQuestions();
+        if (['1', '2', '3', '4', '5'].includes(e.key)) {
+          e.preventDefault();
+          handleSelectAnswer(Number(e.key));
+        } else if (e.key === 'ArrowLeft' && currentQuestionIndex > 0) {
+          e.preventDefault();
+          currentQuestionIndex -= 1;
+          renderCurrentQuestion();
+        } else if (e.key === 'ArrowRight') {
+          const q = activeQs[currentQuestionIndex];
+          if (userAnswers[q.id] !== undefined && currentQuestionIndex < activeQs.length - 1) {
+            e.preventDefault();
+            currentQuestionIndex += 1;
+            renderCurrentQuestion();
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
